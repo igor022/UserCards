@@ -33,7 +33,7 @@ function User(props) {
       const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
       const userId = props.match.params.id;
       const user = data.find((user) => user.id == userId);
-      console.log(user);
+ 
       setUser(user); 
     } catch(err) {
       throw(err);
@@ -45,7 +45,7 @@ function User(props) {
   }, []);
 
   return (
-    <div>
+    <>
     { 
       user
       ? 
@@ -80,7 +80,7 @@ function User(props) {
         
       : 'loading...'
     }
-    </div>
+    </>
   );
 }
 
