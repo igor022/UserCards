@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { NavLink } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     color: 'rgb(0, 0, 0)'
   },
+  navLink: {
+    textDecoration: 'none',
+    color: 'black',
+  }
 }));
 
 export default function ButtonAppBar() {
@@ -36,7 +42,9 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             RoboClub
           </Typography>
-          <Button color="inherit">Users</Button>
+          <Button color="inherit">
+            <NavLink className={classes.navLink} to="/">Users</NavLink>
+          </Button>
           <Button color="inherit">About</Button>
           <Button color="inherit">Contacts</Button>
         </Toolbar>

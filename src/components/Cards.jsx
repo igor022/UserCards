@@ -38,7 +38,7 @@ export default function Cards() {
         {
           users.length 
           ? 
-          users.map((user, i) => (
+          users.slice(0, 6).map((user, i) => (
             <CardItem 
             key={user.id} 
             user={user} 

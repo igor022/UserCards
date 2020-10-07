@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  link: {
+    textDecoration: 'none',
+    color: 'black',
+  }
 }));
 
 export default function CardItem(props) {
@@ -88,7 +93,7 @@ export default function CardItem(props) {
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                <MoreVertIcon />  
+              <MoreVertIcon />  
               </IconButton>
               <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                 {({ TransitionProps, placement }) => (
@@ -99,7 +104,9 @@ export default function CardItem(props) {
                     <Paper>
                       <ClickAwayListener onClickAway={handleClose}>
                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                          <MenuItem onClick={handleClose}>Profile</MenuItem>
+                          <MenuItem onClick={handleClose}>
+                            <Link className={classes.link} to={`/user/${user.id}`}>Profile</Link>
+                          </MenuItem>
                           <MenuItem onClick={handleClose}>Delete</MenuItem>
                         </MenuList>
                       </ClickAwayListener>
