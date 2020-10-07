@@ -9,7 +9,6 @@ function App() {
       <NavBar/>
       <Header />
       <Cards />
-      <h1>Hello</h1>
     </div>
   );
 }
