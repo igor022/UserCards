@@ -18,7 +18,7 @@ export default function Cards() {
   const [users, setUsers] = useState([]);
   
   const classes = useStyles();
-  
+   
   const getUsers = async () => {
     try {
       const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
@@ -27,7 +27,7 @@ export default function Cards() {
       throw(err);
     }
   }
-
+  
   useEffect(() => {
     getUsers();
   }, []);
