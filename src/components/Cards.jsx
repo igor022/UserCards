@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-
 import CardItem from './CardItem';
+
+const axios = require('axios');
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -13,17 +13,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3];
 
 export default function Cards() {
+  const [users, setUsers] = useState([]);
+  
   const classes = useStyles();
+  
+  const getUsers = async () => {
+    try {
+      const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
+      setUsers(data); 
+    } catch(err) {
+      throw(err);
+    }
+  }
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return(
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
-        {cards.map((card) => (
-          <CardItem card={card} imgUrl={'https://robohash.org/' + Math.random()}></CardItem>
-        ))}
+        {
+          users.length 
+          ? 
+          users.map((user, i) => (
+            <CardItem 
+            key={user.id} 
+            user={user} 
+            >
+            </CardItem>
+          ))
+          : ''
+        }
       </Grid>
     </Container>
   )

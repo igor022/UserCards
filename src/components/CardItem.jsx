@@ -48,7 +48,7 @@ export default function CardItem(props) {
     setOpen((prevOpen) => !prevOpen);
   };
 
-  function handleListKeyDown(event) {
+  const handleListKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
@@ -72,8 +72,10 @@ export default function CardItem(props) {
     prevOpen.current = open;
   }, [open]);
 
+  const user = props.user;
+
   return(
-    <Grid item key={props.card} xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
         <CardHeader
 
@@ -86,7 +88,7 @@ export default function CardItem(props) {
                 aria-haspopup="true"
                 onClick={handleToggle}
               >
-                <MoreVertIcon />
+                <MoreVertIcon />  
               </IconButton>
               <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                 {({ TransitionProps, placement }) => (
@@ -107,17 +109,17 @@ export default function CardItem(props) {
               </Popper>
             </div>
           }
-          title="Full Name"
-          subheader="email"
+          title={user.name}
+          subheader={user.email}
         />
         <CardMedia
           className={classes.cardMedia}
-          image={props.imgUrl}
+          image={`https://robohash.org/${user.id}`}
           title="Image title"
         />
         <CardContent className={classes.cardContent}>
           <Typography>
-            This is a media card. You can use this section to describe the content.
+            {user.company.catchPhrase}
           </Typography>
         </CardContent>
       </Card>
