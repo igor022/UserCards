@@ -22,7 +22,7 @@ export default function Cards() {
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
         {cards.map((card) => (
-          <CardItem card={card}></CardItem>
+          <CardItem card={card} imgUrl={'https://robohash.org/' + Math.random()}></CardItem>
         ))}
       </Grid>
     </Container>

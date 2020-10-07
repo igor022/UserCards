@@ -17,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  toolbar: {
+    background: theme.palette.background.paper,
+    color: 'rgb(0, 0, 0)'
+  },
 }));
 
 export default function ButtonAppBar() {
@@ -25,12 +29,12 @@ export default function ButtonAppBar() {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            CRM
+            RoboClub
           </Typography>
           <Button color="inherit">Users</Button>
           <Button color="inherit">About</Button>
