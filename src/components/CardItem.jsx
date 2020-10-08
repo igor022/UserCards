@@ -105,7 +105,7 @@ export default function CardItem(props) {
                       <ClickAwayListener onClickAway={handleClose}>
                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                           <MenuItem onClick={handleClose}>
-                            <Link className={classes.link} to={`/user/${user.id}`}>Profile</Link>
+                            <Link className={classes.link} to={`/user/${user._id}`}>Profile</Link>
                           </MenuItem>
                           <MenuItem onClick={handleClose}>Delete</MenuItem>
                         </MenuList>
@@ -121,12 +121,12 @@ export default function CardItem(props) {
         />
         <CardMedia
           className={classes.cardMedia}
-          image={`https://robohash.org/${user.id}`}
+          image={`https://robohash.org/${user._id}`}
           title="Image title"
         />
         <CardContent className={classes.cardContent}>
           <Typography>
-            {user.company.catchPhrase}
+            {user.description}
           </Typography>
         </CardContent>
       </Card>

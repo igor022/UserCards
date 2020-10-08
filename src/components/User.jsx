@@ -30,9 +30,9 @@ function User(props) {
    
   const getUsers = async () => {
     try {
-      const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
+      const { data } = await axios.get('http://localhost:8080/users/');
       const userId = props.match.params.id;
-      const user = data.find((user) => user.id == userId);
+      const user = data.find((user) => user._id == userId);
  
       setUser(user); 
     } catch(err) {
@@ -56,7 +56,7 @@ function User(props) {
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.cardMedia}
-                  image={`https://robohash.org/${user.id}`}
+                  image={`https://robohash.org/${user._id}`}
                   title="Image title"
                 />
                 <Button variant="contained" color="secondary">
@@ -72,7 +72,7 @@ function User(props) {
                 {user.email}
               </Typography>
               <Typography variant="body1" color="textSecondary" paragraph>
-              {user.company.catchPhrase}
+              {user.description}
               </Typography>
             </Grid>
           </Grid>

@@ -21,7 +21,8 @@ export default function Cards() {
    
   const getUsers = async () => {
     try {
-      const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
+      const { data } = await axios.get('http://localhost:8080/users/');
+      console.log(data);
       setUsers(data); 
     } catch(err) {
       throw(err);
@@ -38,9 +39,9 @@ export default function Cards() {
         {
           users.length 
           ? 
-          users.slice(0, 6).map((user, i) => (
+          users.map((user, i) => (
             <CardItem 
-            key={user.id} 
+            key={user._id} 
             user={user} 
             >
             </CardItem>
