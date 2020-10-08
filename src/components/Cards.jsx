@@ -22,7 +22,6 @@ export default function Cards() {
   const getUsers = async () => {
     try {
       const { data } = await axios.get('http://localhost:8080/users/');
-      console.log(data);
       setUsers(data); 
     } catch(err) {
       throw(err);
