@@ -11,15 +11,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   addButton: {
-    margin: theme.spacing(2, 3, 2),
+    width: '100%'
   }
 }));
 
-const AddUserForm = (props) => {
+const EditUserForm = (props) => {
   const [open, setOpen] = useState(false);
 
   const [form] = useState(createRef());
-  const { addUser } = props;
+  const { editUser, user } = props;
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -32,7 +32,7 @@ const AddUserForm = (props) => {
 
   const handleAdd = async () => {
     const { name, email, description } = form.current;
-    await addUser({
+    await editUser({
       name: name.value,
       email: email.value,
       description: description.value,
@@ -49,10 +49,10 @@ const AddUserForm = (props) => {
   return (
     <div>
       <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
-        Add user
+        Edit user
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add user</DialogTitle>
+        <DialogTitle id="form-dialog-title">Edit user</DialogTitle>
         <DialogContent>
           <form 
             onSubmit={handleSubmit} 
@@ -66,6 +66,7 @@ const AddUserForm = (props) => {
               id="name"
               label="Name"
               type="text"
+              value={user.name}
               fullWidth
               required
             />
@@ -75,6 +76,7 @@ const AddUserForm = (props) => {
               id="email"
               label="Email Address"
               type="email"
+              value={user.email}
               fullWidth
               required
             />
@@ -84,6 +86,7 @@ const AddUserForm = (props) => {
               id="description"
               label="About"
               type="text"
+              value={user.description}
               fullWidth
             />
           </form>
@@ -101,4 +104,4 @@ const AddUserForm = (props) => {
   );
 }
 
-export default withRouter(AddUserForm);
+export default withRouter(EditUserForm);

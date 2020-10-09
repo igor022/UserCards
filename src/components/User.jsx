@@ -10,6 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Loading from './Loading';
 import { makeStyles } from '@material-ui/core/styles';
+import EditUserForm from './EditUserForm';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,12 +29,15 @@ const useStyles = makeStyles((theme) => ({
   usersContent: {
     minHeight: '100vh',
   },
+  deleteButton: {
+    width: '100%',
+  }
 }));
 
 function User(props) {
   const classes = useStyles();
   
-
+  const [editForm, setEditForm] = useState({});
   const [user, setUser] = useState(null);
    
   const getUsers = async () => {
@@ -48,6 +52,10 @@ function User(props) {
     }
   }
   
+  const editUser = async () => {
+    await userApi.editUser(user)
+  }
+
   const handleDelete = async () => {
     try {
       await userApi.deleteUser(user._id);
@@ -74,10 +82,10 @@ function User(props) {
                   className={classes.cardMedia}
                   image={`https://robohash.org/${user._id}`}
                   title="Image title"
-                />
-                <Button onClick={handleDelete} variant="contained" color="secondary">
-                  Delete user
-                </Button>
+                >
+                  
+                </CardMedia>
+                
               </Card>
             </Grid>
             <Grid item xs={8}>
@@ -90,8 +98,14 @@ function User(props) {
               <Typography variant="body1" color="textSecondary" paragraph>
                 {user.description}
               </Typography>
+              
             </Grid>
           </Grid>
+
+          <EditUserForm user={user} editUser={editUser}/>
+          <Button className={classes.deleteButton} onClick={handleDelete} variant="contained" color="secondary">
+            Delete user
+          </Button>
         </Container> 
         
       : <Loading />

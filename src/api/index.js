@@ -17,6 +17,25 @@ const deleteUser = async (id) => {
   }
 }
 
+const editUser = async (user) => {
+  try {
+    const users = await axios (
+      {
+        method: 'patch',
+        url: 'http://localhost:8080/users/',
+        data: {
+          name: user.name,
+          email: user.email,
+          description: user.description
+        }
+      }
+    );
+    return users.data;
+  } catch(err) {
+    throw(err);
+  }
+}
+
 const getUsers = async () => {
   try {
     const { data } = await axios.get('http://localhost:8080/users/');
@@ -28,5 +47,6 @@ const getUsers = async () => {
 
 export const userApi = {
   deleteUser,
-  getUsers
+  getUsers,
+  editUser,
 }
