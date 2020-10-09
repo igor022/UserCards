@@ -7,7 +7,7 @@ function Home() {
   return (
     <div>
       <Header />
-      <Cards />
+      <Cards cardsAmount={3}/>
     </div>
   );
 }

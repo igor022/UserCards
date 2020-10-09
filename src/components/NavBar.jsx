@@ -43,10 +43,12 @@ export default function ButtonAppBar() {
             RoboClub
           </Typography>
           <Button color="inherit">
-            <NavLink className={classes.navLink} to="/">Users</NavLink>
+            <NavLink className={classes.navLink} to="/">Home</NavLink>
           </Button>
-          <Button color="inherit">About</Button>
-          <Button color="inherit">Contacts</Button>
+          <Button color="inherit">
+            <NavLink className={classes.navLink} to="/users">Users</NavLink></Button>
+          <Button color="inherit">
+            <NavLink className={classes.navLink} to="/">Contacts</NavLink></Button>
         </Toolbar>
       </AppBar>
     </div>

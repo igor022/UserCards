@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Cards() {
+export default function Cards(props) {
   const [users, setUsers] = useState([]);
   
   const classes = useStyles();
@@ -38,7 +38,7 @@ export default function Cards() {
         {
           users.length 
           ? 
-          users.map((user, i) => (
+          users.slice(0, props.cardsAmount).map((user, i) => (
             <CardItem 
             key={user._id} 
             user={user} 

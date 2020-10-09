@@ -18,7 +18,11 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '100%', // 16:9
   },
   userGrid: {
-    padding: theme.spacing(4, 0, 4),
+    margin: theme.spacing(4, 0, 4),
+    backgroundColor: theme.palette.background.paper,
+  },
+  usersContent: {
+    minHeight: '100vh',
   },
 }));
 
@@ -45,13 +49,12 @@ function User(props) {
   }, []);
 
   return (
-    <>
+    <div className={classes.usersContent}>
     { 
       user
       ? 
-      
         <Container maxWidth="sm">
-          <Grid className={classes.userGrid} container spacing={2}>
+          <Grid container className={classes.userGrid} spacing={2}>
             <Grid item xs={4}>
               <Card className={classes.card}>
                 <CardMedia
@@ -80,7 +83,7 @@ function User(props) {
         
       : 'loading...'
     }
-    </>
+    </div>
   );
 }
 

@@ -105,7 +105,7 @@ export default function CardItem(props) {
                       <ClickAwayListener onClickAway={handleClose}>
                         <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                           <MenuItem onClick={handleClose}>
-                            <Link className={classes.link} to={`/user/${user._id}`}>Profile</Link>
+                            <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
                           </MenuItem>
                           <MenuItem onClick={handleClose}>Delete</MenuItem>
                         </MenuList>
