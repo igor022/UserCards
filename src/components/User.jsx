@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom'
+import axios from 'axios';
+import { userApi } from '../api';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
+import Loading from './Loading';
+import { makeStyles } from '@material-ui/core/styles';
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -44,6 +48,15 @@ function User(props) {
     }
   }
   
+  const handleDelete = async () => {
+    try {
+      await userApi.deleteUser(user._id);
+      props.history.push('/users');
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -62,7 +75,7 @@ function User(props) {
                   image={`https://robohash.org/${user._id}`}
                   title="Image title"
                 />
-                <Button variant="contained" color="secondary">
+                <Button onClick={handleDelete} variant="contained" color="secondary">
                   Delete user
                 </Button>
               </Card>
@@ -75,16 +88,16 @@ function User(props) {
                 {user.email}
               </Typography>
               <Typography variant="body1" color="textSecondary" paragraph>
-              {user.description}
+                {user.description}
               </Typography>
             </Grid>
           </Grid>
         </Container> 
         
-      : 'loading...'
+      : <Loading />
     }
     </div>
   );
 }
 
-export default User;
+export default withRouter(User);

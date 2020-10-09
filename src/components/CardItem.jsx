@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -45,9 +45,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CardItem(props) {
   const classes = useStyles();
-
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const user = props.user;
+  
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -68,8 +69,9 @@ export default function CardItem(props) {
     setOpen(false);
   };
 
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
+  const prevOpen = useRef(open);
+
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
@@ -77,13 +79,11 @@ export default function CardItem(props) {
     prevOpen.current = open;
   }, [open]);
 
-  const user = props.user;
 
   return(
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
         <CardHeader
-
           action={
             <div>
               <IconButton 
@@ -107,7 +107,7 @@ export default function CardItem(props) {
                           <MenuItem onClick={handleClose}>
                             <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
                           </MenuItem>
-                          <MenuItem onClick={handleClose}>Delete</MenuItem>
+                          <MenuItem onClick={() => props.handleDelete(user._id)}>Delete</MenuItem>
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>

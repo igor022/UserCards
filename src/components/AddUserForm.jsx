@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,10 +17,9 @@ const useStyles = makeStyles((theme) => ({
 
 const AddUserForm = (props) => {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [description, setDescription] = useState('');
-  const [form, setForm] = useState(React.createRef());
+
+  const [form] = useState(React.createRef());
+  const { addUser } = props;
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -33,30 +30,19 @@ const AddUserForm = (props) => {
     setOpen(false);
   };
 
-  const addUser = async () => {
+  const handleAdd = async () => {
     const { name, email, description } = form.current;
-   
-    try {
-      await axios.post(
-        'http://localhost:8080/users', 
-        { 
-          name : name.value, 
-          email: email.value, 
-          description: description.value 
-        },
-      );
-      handleClose();
-      //window.location.reload();
-      // props.history.push('/users');
-    } catch (err) {
-      console.log(err);
-    }
-
+    await addUser({
+      name: name.value,
+      email: email.value,
+      description: description.value,
+    })
+    handleClose();
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addUser();
+    handleAdd();
   }
 
 
