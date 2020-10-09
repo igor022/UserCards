@@ -8,8 +8,8 @@ const axios = require('axios');
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -38,13 +38,16 @@ export default function Cards(props) {
         {
           users.length 
           ? 
-          users.slice(0, props.cardsAmount).map((user, i) => (
-            <CardItem 
-            key={user._id} 
-            user={user} 
-            >
-            </CardItem>
-          ))
+          users
+            .slice(0, props.cardsAmount)
+            .map((user, i) => (
+              <CardItem 
+                key={user._id} 
+                user={user} 
+              >
+              </CardItem>
+            )
+          )
           : ''
         }
       </Grid>
