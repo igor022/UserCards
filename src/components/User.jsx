@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
 const User = (props) => {
   const classes = useStyles();
   
-  const [editForm, setEditForm] = useState({});
   const [user, setUser] = useState(null);
    
   const getUsers = async () => {
@@ -89,7 +88,8 @@ const User = (props) => {
 
   const deleteTag = (tag) => {
     const edited = {...user};
-    edited.tags.splice(edited.tags.findIndex((t) => t == tag), 1);
+    const tags = user.tags.filter((t) => t !== tag)
+    edited.tags = tags;
     editUser(edited);
   }
 
