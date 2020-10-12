@@ -43,6 +43,7 @@ const getUsers = async () => {
   }
 }
 
+
 export const userApi = {
   deleteUser,
   getUsers,

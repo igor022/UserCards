@@ -10,8 +10,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Loading from './Loading';
-import { makeStyles } from '@material-ui/core/styles';
 import EditUserForm from './EditUserForm';
+import Tags from './Tags.jsx';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   aboutMe: {
-    margin: theme.spacing(0, 1, 4),
-  }
+    margin: theme.spacing(2, 1, 4),
+  },
 }));
 
-function User(props) {
+const User = (props) => {
   const classes = useStyles();
   
   const [editForm, setEditForm] = useState({});
@@ -74,6 +75,18 @@ function User(props) {
     }
   }
 
+  const addTag = (tag) => {
+    const edited = {...user};
+    edited.tags.push(tag);
+    editUser(edited);
+  }
+
+  const deleteTag = (tag) => {
+    const edited = {...user};
+    edited.tags.splice(edited.tags.findIndex((t) => t == tag), 1);
+    editUser(edited);
+  }
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -103,9 +116,12 @@ function User(props) {
               </Typography>
               <Typography variant="body1" color="textSecondary" paragraph>
                 {user.email}
-              </Typography>     
+              </Typography>   
+              
             </Grid>
           </Grid>
+          <Tags tags={user.tags} addTag={addTag} deleteTag={deleteTag} className={classes.tags}/>
+          <hr></hr>
           <Box className={classes.aboutMe}>
             <Typography variant="h4" color="textPrimary">
               About me
