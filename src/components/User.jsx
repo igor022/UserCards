@@ -35,8 +35,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   aboutMe: {
-    margin: theme.spacing(2, 1, 4),
+    margin: theme.spacing(2, 0, 4, 0),
   },
+  aboutText: {
+    textAlign: 'justify',
+  }
 }));
 
 const User = (props) => {
@@ -50,7 +53,10 @@ const User = (props) => {
       const { data } = await axios.get('http://localhost:8080/users/');
       const userId = props.match.params.id;
       const user = data.find((user) => user._id == userId);
- 
+      if (!user) {
+        props.history.push('/404');
+        return;
+      }
       setUser(user); 
     } catch(err) {
       throw(err);
@@ -122,14 +128,14 @@ const User = (props) => {
           </Grid>
           <Tags tags={user.tags} addTag={addTag} deleteTag={deleteTag} className={classes.tags}/>
           <hr></hr>
-          <Box className={classes.aboutMe}>
-            <Typography variant="h4" color="textPrimary">
+          <div className={classes.aboutMe}>
+            <Typography variant="h4" color="textPrimary" gutterBottom>
               About me
             </Typography>
-            <Typography variant="body1" color="textPrimary" paragraph>
+            <Typography className={classes.aboutText} variant="body1" color="textPrimary" gutterBottom>
               {user.description}
             </Typography>
-          </Box>
+          </div>
 
           <EditUserForm user={user} editUser={editUser}/>
           <Button className={classes.deleteButton} onClick={handleDelete} variant="contained" color="secondary">

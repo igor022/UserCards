@@ -85,13 +85,13 @@ const EditUserForm = (props) => {
               onChange={handleChange}
             />
             <TextField
-              autoFocus
-              margin="dense"
               id="description"
-              label="About"
-              type="text"
-              value={formFields.description}
+              margin="dense"
+              label="About me"
+              multiline
+              rowsMax={4}
               fullWidth
+              value={formFields.description}
               onChange={handleChange}
             />
           </form>

@@ -126,7 +126,11 @@ export default function CardItem(props) {
         />
         <CardContent className={classes.cardContent}>
           <Typography>
-            {user.description}
+            {
+              user.description.length > 30
+              ? `${user.description.slice(0, 40)}...`
+              : user.description
+            }       
           </Typography>
         </CardContent>
       </Card>

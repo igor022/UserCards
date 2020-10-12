@@ -79,11 +79,11 @@ const AddUserForm = (props) => {
               required
             />
             <TextField
-              autoFocus
-              margin="dense"
               id="description"
-              label="About"
-              type="text"
+              margin="dense"
+              label="About me"
+              multiline
+              rowsMax={4}
               fullWidth
             />
           </form>
