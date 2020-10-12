@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,8 +18,13 @@ const useStyles = makeStyles((theme) => ({
 const EditUserForm = (props) => {
   const [open, setOpen] = useState(false);
 
-  const [form] = useState(createRef());
   const { editUser, user } = props;
+  const [formFields, setFormFields] = useState({
+    name: user.name,
+    email: user.email,
+    description: user.description
+  });
+
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -30,19 +35,17 @@ const EditUserForm = (props) => {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
-    const { name, email, description } = form.current;
-    await editUser({
-      name: name.value,
-      email: email.value,
-      description: description.value,
-    })
-    handleClose();
+  const handleChange = (e) => {
+    setFormFields({
+      ...formFields,
+      [e.target.id]: e.target.value,
+    });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleAdd();
+    editUser({ ...user, ...formFields });
+    handleClose();
   }
 
 
@@ -58,7 +61,6 @@ const EditUserForm = (props) => {
             onSubmit={handleSubmit} 
             className={classes.addForm} 
             autoComplete="off"
-            ref={form}
           >
             <TextField
               autoFocus
@@ -66,9 +68,10 @@ const EditUserForm = (props) => {
               id="name"
               label="Name"
               type="text"
-              value={user.name}
+              value={formFields.name}
               fullWidth
               required
+              onChange={handleChange}
             />
             <TextField
               autoFocus
@@ -76,9 +79,10 @@ const EditUserForm = (props) => {
               id="email"
               label="Email Address"
               type="email"
-              value={user.email}
+              value={formFields.email}
               fullWidth
               required
+              onChange={handleChange}
             />
             <TextField
               autoFocus
@@ -86,8 +90,9 @@ const EditUserForm = (props) => {
               id="description"
               label="About"
               type="text"
-              value={user.description}
+              value={formFields.description}
               fullWidth
+              onChange={handleChange}
             />
           </form>
         </DialogContent>
@@ -96,7 +101,7 @@ const EditUserForm = (props) => {
             Cancel
           </Button>
           <Button onClick={handleSubmit} color="primary">
-            Add
+            Edit
           </Button>
         </DialogActions>
       </Dialog>

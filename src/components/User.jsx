@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import Loading from './Loading';
 import { makeStyles } from '@material-ui/core/styles';
 import EditUserForm from './EditUserForm';
@@ -20,10 +21,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   cardMedia: {
-    paddingTop: '100%', // 16:9
+    paddingTop: '120%', // 16:9
   },
   userGrid: {
-    margin: theme.spacing(4, 0, 4),
+    margin: theme.spacing(4, 0, 2),
     backgroundColor: theme.palette.background.paper,
   },
   usersContent: {
@@ -31,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
   deleteButton: {
     width: '100%',
+  },
+  aboutMe: {
+    margin: theme.spacing(0, 1, 4),
   }
 }));
 
@@ -52,8 +56,13 @@ function User(props) {
     }
   }
   
-  const editUser = async () => {
-    await userApi.editUser(user)
+  const editUser = async (edited) => {
+    try {
+      const editedUser = await userApi.editUser(edited);
+      setUser(editedUser);
+    } catch(err) {
+      throw(err);
+    }
   }
 
   const handleDelete = async () => {
@@ -94,13 +103,17 @@ function User(props) {
               </Typography>
               <Typography variant="body1" color="textSecondary" paragraph>
                 {user.email}
-              </Typography>
-              <Typography variant="body1" color="textSecondary" paragraph>
-                {user.description}
-              </Typography>
-              
+              </Typography>     
             </Grid>
           </Grid>
+          <Box className={classes.aboutMe}>
+            <Typography variant="h4" color="textPrimary">
+              About me
+            </Typography>
+            <Typography variant="body1" color="textPrimary" paragraph>
+              {user.description}
+            </Typography>
+          </Box>
 
           <EditUserForm user={user} editUser={editUser}/>
           <Button className={classes.deleteButton} onClick={handleDelete} variant="contained" color="secondary">

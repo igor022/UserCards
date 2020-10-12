@@ -24,9 +24,7 @@ const editUser = async (user) => {
         method: 'patch',
         url: 'http://localhost:8080/users/',
         data: {
-          name: user.name,
-          email: user.email,
-          description: user.description
+          user
         }
       }
     );
