@@ -9,6 +9,7 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 import EditUserForm from './EditUserForm';
 import Tags from './Tags.jsx';
@@ -16,6 +17,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles((theme) => ({
+  profile: {
+    padding: theme.spacing(2, 3),
+  },
   card: {
     height: '100%',
     display: 'flex',
@@ -25,10 +29,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '120%', // 16:9
   },
   userGrid: {
-    margin: theme.spacing(4, 0, 2),
+    margin: theme.spacing(0, 0, 2),
     backgroundColor: theme.palette.background.paper,
   },
   usersContent: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    padding: theme.spacing(2),
     minHeight: '100vh',
   },
   deleteButton: {
@@ -39,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   aboutText: {
     textAlign: 'justify',
+    overflowWrap: 'break-word',
   }
 }));
 
@@ -103,44 +110,47 @@ const User = (props) => {
       user
       ? 
         <Container maxWidth="sm">
-          <Grid container className={classes.userGrid} spacing={2}>
-            <Grid item xs={4}>
-              <Card className={classes.card}>
-                <CardMedia
-                  className={classes.cardMedia}
-                  image={`https://robohash.org/${user._id}`}
-                  title="Image title"
-                >
+          <Paper className={classes.profile}>
+            <Grid container className={classes.userGrid} spacing={2}>
+              <Grid item xs={4}>
+                <Card className={classes.card}>
+                  <CardMedia
+                    className={classes.cardMedia}
+                    image={`https://robohash.org/${user._id}`}
+                    title="Image title"
+                    
+                  >
+                    
+                  </CardMedia>
                   
-                </CardMedia>
+                </Card>
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h5"  color="textPrimary" gutterBottom>
+                  {user.name}
+                </Typography>
+                <Typography variant="body1" color="textSecondary" paragraph>
+                  {user.email}
+                </Typography>   
                 
-              </Card>
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h5"  color="textPrimary" gutterBottom>
-                {user.name}
+            <Tags tags={user.tags} addTag={addTag} deleteTag={deleteTag} className={classes.tags}/>
+            <hr></hr>
+            <div className={classes.aboutMe}>
+              <Typography variant="h4" color="textPrimary" gutterBottom>
+                About me
               </Typography>
-              <Typography variant="body1" color="textSecondary" paragraph>
-                {user.email}
-              </Typography>   
-              
-            </Grid>
-          </Grid>
-          <Tags tags={user.tags} addTag={addTag} deleteTag={deleteTag} className={classes.tags}/>
-          <hr></hr>
-          <div className={classes.aboutMe}>
-            <Typography variant="h4" color="textPrimary" gutterBottom>
-              About me
-            </Typography>
-            <Typography className={classes.aboutText} variant="body1" color="textPrimary" gutterBottom>
-              {user.description}
-            </Typography>
-          </div>
+              <Typography className={classes.aboutText} variant="body1" color="textPrimary" gutterBottom>
+                {user.description}
+              </Typography>
+            </div>
 
-          <EditUserForm user={user} editUser={editUser}/>
-          <Button className={classes.deleteButton} onClick={handleDelete} variant="contained" color="secondary">
-            Delete user
-          </Button>
+            <EditUserForm user={user} editUser={editUser}/>
+            <Button className={classes.deleteButton} onClick={handleDelete} variant="contained" color="secondary">
+              Delete user
+            </Button>
+          </Paper>
         </Container> 
         
       : <Loading />

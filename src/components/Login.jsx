@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -37,6 +37,23 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
 
+  const [formFields, setFormFields] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    setFormFields({
+      ...formFields,
+      [e.target.id]: e.target.value,
+    });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formFields);
+  }
+
   return (
     <Box className={classes.root}>
       <Container className={classes.container} maxWidth="xs">
@@ -44,10 +61,10 @@ const Login = () => {
           <Typography variant="h4" gutterBottom>
             Log in
           </Typography>
-          <form className={classes.form} autoComplete="off">
-            <TextField type="email" id="email" label="Email" fullWidth/>
-            <TextField type="password" id="password" label="Password" fullWidth/>
-            <Button className={classes.submit} variant="contained" color="primary">
+          <form onSubmit={handleSubmit} className={classes.form} autoComplete="off">
+            <TextField onChange={handleChange} type="email" id="email" label="Email" fullWidth/>
+            <TextField onChange={handleChange} type="password" id="password" label="Password" fullWidth/>
+            <Button type="submit" className={classes.submit} variant="contained" color="primary">
               Log in
             </Button>
           </form>
