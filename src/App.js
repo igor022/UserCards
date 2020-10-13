@@ -21,6 +21,7 @@ function App() {
           <Route path='/auth/signup' component={Signup} />
           <Route path='/auth/login' component={Login} />
           <Route path='/404' component={NotFound} />
+          <Route path='/' component={NotFound} />
         </Switch>
       </div>
     </BrowserRouter>

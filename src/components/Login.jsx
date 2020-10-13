@@ -4,11 +4,18 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: theme.spacing(4, 'auto', 2, 'auto'),
-    textAlign: 'center'
+  root: {  
+    textAlign: 'center',
+    minHeight: '100vh',
+    padding: theme.spacing(8, 0, 0, 0),
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  },
+  container: {
+    
   },
   form: {
     display: 'flex',
@@ -19,7 +26,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   submit: {
-    margin: theme.spacing(4),
+    margin: theme.spacing(4, 0, 0, 0),
+    
+  },
+  paper: {
+    padding: theme.spacing(4),
   }
 }));
 
@@ -27,18 +38,22 @@ const Login = () => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root} maxWidth="xs">
-      <Typography variant="h4" gutterBottom>
-        Log in
-      </Typography>
-      <form className={classes.form} autoComplete="off">
-        <TextField type="email" id="email" label="Email" fullWidth/>
-        <TextField type="password" id="password" label="Password" fullWidth/>
-        <Button className={classes.submit} variant="contained" color="primary">
-          Log in
-        </Button>
-      </form>
-    </Container>
+    <Box className={classes.root}>
+      <Container className={classes.root} maxWidth="xs">
+        <Paper className={classes.paper}>
+          <Typography variant="h4" gutterBottom>
+            Log in
+          </Typography>
+          <form className={classes.form} autoComplete="off">
+            <TextField type="email" id="email" label="Email" fullWidth/>
+            <TextField type="password" id="password" label="Password" fullWidth/>
+            <Button className={classes.submit} variant="contained" color="primary">
+              Log in
+            </Button>
+          </form>
+          </Paper>
+      </Container>
+    </Box>
   );
 }
 
