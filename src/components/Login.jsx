@@ -39,7 +39,7 @@ const Login = () => {
 
   return (
     <Box className={classes.root}>
-      <Container className={classes.root} maxWidth="xs">
+      <Container className={classes.container} maxWidth="xs">
         <Paper className={classes.paper}>
           <Typography variant="h4" gutterBottom>
             Log in
