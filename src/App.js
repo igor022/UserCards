@@ -7,8 +7,7 @@ import Users from './components/Users';
 import NotFound from './components/NotFound';
 import Signup from './components/Signup';
 import Login from './components/Login';
-import Cookies from './components/Cookies';
-
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
@@ -18,10 +17,9 @@ function App() {
         <Switch>
           <Route exact path='/' component={Home} />
           <Route exact path='/users' component={Users} />
-          <Route path='/users/:id' component={User} />
+          <PrivateRoute path='/users/:id' component={User}/>
           <Route path='/auth/signup' component={Signup} />
           <Route path='/auth/login' component={Login} />
-          <Route path='/auth/cookies' component={Cookies} />
           <Route path='/404' component={NotFound} />
           <Route path='/' component={NotFound} />
         </Switch>

@@ -7,7 +7,8 @@ const deleteUser = async (id) => {
         method: 'delete',
         url: 'http://localhost:8080/users/',
         data: {
-          id  
+          id,
+          jwt: localStorage.getItem('jwt'),
         }
       }
     );
@@ -24,7 +25,8 @@ const editUser = async (user) => {
         method: 'patch',
         url: 'http://localhost:8080/users/',
         data: {
-          user
+          user,
+          jwt: localStorage.getItem('jwt'),
         }
       }
     );

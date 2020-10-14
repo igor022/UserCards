@@ -44,6 +44,7 @@ const Users = (props) => {
           name,
           email, 
           description,
+          jwt: localStorage.getItem('jwt'),
         },
       );
       getUsers();

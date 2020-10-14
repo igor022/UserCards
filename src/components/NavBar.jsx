@@ -43,6 +43,10 @@ const NavBar = (props) => {
   const classes = useStyles();
 
 
+  const handleClick = () => {
+    window.location.reload();
+  }
+
   const handleLogout = () => {
     localStorage.removeItem('id');
     localStorage.removeItem('jwt');
@@ -55,7 +59,7 @@ const NavBar = (props) => {
         <Toolbar className={classes.toolbar}>
           
 
-          <NavLink className={classes.navLink} to="/">
+          <NavLink onClick={handleClick} className={classes.navLink} to="/">
             <Typography variant="h6" className={classes.title}>
               RoboClub
             </Typography>
