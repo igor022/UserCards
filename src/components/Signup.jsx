@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -9,14 +10,14 @@ import Box from '@material-ui/core/Box';
 
 
 const useStyles = makeStyles((theme) => ({
-  root: {  
+  root: {
     textAlign: 'center',
     minHeight: '100vh',
     padding: theme.spacing(8, 0, 0, 0),
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
   },
   container: {
-    
+
   },
   form: {
     display: 'flex',
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(4, 0, 0, 0),
-    
+
   },
   paper: {
     padding: theme.spacing(4),
@@ -52,9 +53,18 @@ const Signup = () => {
     });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
+    const { name, email, password } = formFields;
+    const { data } = await axios.post(
+      'http://localhost:8080/auth/signup/',
+      {
+        name,
+        email,
+        password
+      }
+    )
+    console.log(data);
   }
 
   return (
@@ -65,10 +75,10 @@ const Signup = () => {
             Sign up
           </Typography>
           <form onSubmit={handleSubmit} className={classes.form} autoComplete="off">
-            <TextField onChange={handleChange} type="text" id="name" label="Name" fullWidth/>
-            <TextField onChange={handleChange} type="email" id="email" label="Email" fullWidth/>
-            <TextField onChange={handleChange} type="password" id="password" label="Password" fullWidth/>
-            <TextField onChange={handleChange} type="password" id="repeatPassword" label="Repeat password" fullWidth/>
+            <TextField onChange={handleChange} type="text" id="name" label="Name" fullWidth />
+            <TextField onChange={handleChange} type="email" id="email" label="Email" fullWidth />
+            <TextField onChange={handleChange} type="password" id="password" label="Password" fullWidth />
+            <TextField onChange={handleChange} type="password" id="repeatPassword" label="Repeat password" fullWidth />
             <Button type="submit" className={classes.submit} variant="contained" color="primary">
               Sign up
             </Button>
