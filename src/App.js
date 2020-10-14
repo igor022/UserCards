@@ -7,6 +7,7 @@ import Users from './components/Users';
 import NotFound from './components/NotFound';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Cookies from './components/Cookies';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path='/users/:id' component={User} />
           <Route path='/auth/signup' component={Signup} />
           <Route path='/auth/login' component={Login} />
+          <Route path='/auth/cookies' component={Cookies} />
           <Route path='/404' component={NotFound} />
           <Route path='/' component={NotFound} />
         </Switch>

@@ -118,7 +118,6 @@ const User = (props) => {
                     className={classes.cardMedia}
                     image={`https://robohash.org/${user._id}`}
                     title="Image title"
-                    
                   >
                     
                   </CardMedia>
