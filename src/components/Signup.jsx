@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Signup = () => {
+const Signup = (props) => {
   const classes = useStyles();
 
   const [formFields, setFormFields] = useState({
@@ -63,8 +64,11 @@ const Signup = () => {
         email,
         password
       }
-    )
-    console.log(data);
+    );
+
+    if (data._id) {
+      props.history.push('/');
+    }
   }
 
   return (
@@ -89,4 +93,4 @@ const Signup = () => {
   );
 }
 
-export default Signup;
+export default withRouter(Signup);

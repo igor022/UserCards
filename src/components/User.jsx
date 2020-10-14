@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { userApi } from '../api';
 import Container from '@material-ui/core/Container';
@@ -14,7 +14,6 @@ import Loading from './Loading';
 import EditUserForm from './EditUserForm';
 import Tags from './Tags.jsx';
 import { makeStyles } from '@material-ui/core/styles';
-
 
 const useStyles = makeStyles((theme) => ({
   profile: {
@@ -56,7 +55,7 @@ const User = (props) => {
    
   const getUsers = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/users/');
+      const data = await userApi.getUsers();
       const userId = props.match.params.id;
       const user = data.find((user) => user._id == userId);
       if (!user) {

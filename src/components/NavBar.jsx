@@ -26,6 +26,13 @@ const useStyles = makeStyles((theme) => ({
   navLink: {
     textDecoration: 'none',
     color: 'black',
+  },
+  signup: {
+    textDecoration: 'none',
+    color: 'white'
+  },
+  auth: {
+    marginLeft: theme.spacing(2),
   }
 }));
 
@@ -46,9 +53,16 @@ export default function ButtonAppBar() {
             <NavLink className={classes.navLink} to="/">Home</NavLink>
           </Button>
           <Button color="inherit">
-            <NavLink className={classes.navLink} to="/users">Users</NavLink></Button>
-          <Button color="inherit">
-            <NavLink className={classes.navLink} to="/">Contacts</NavLink></Button>
+            <NavLink className={classes.navLink} to="/users">Users</NavLink>
+            </Button>
+          <div className={classes.auth}>  
+            <Button color="inherit">
+              <NavLink className={classes.navLink} to="/auth/login">Log in</NavLink>
+            </Button>
+            <Button variant="contained" color="primary">
+              <NavLink className={classes.signup} to="/auth/signup">Sign up</NavLink>
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
     </div>

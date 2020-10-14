@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Cards from './Cards';
 import AddUserForm from './AddUserForm';
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Users() {
+const Users = (props) => {
   const classes = useStyles();
   
   const [users, setUsers] = useState([]);
@@ -29,7 +30,7 @@ function Users() {
       const result = await userApi.getUsers();
       setUsers(result);
     } catch (error) {
-      console.log(error);
+      props.history.push('/auth/login');
     }
   }
 
@@ -77,4 +78,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default withRouter(Users);

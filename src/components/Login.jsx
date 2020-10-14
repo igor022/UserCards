@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
 
   const [formFields, setFormFields] = useState({
@@ -49,9 +50,22 @@ const Login = () => {
     });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formFields);
+
+    const { email, password } = formFields;
+    const { data } = await axios.post(
+      'http://localhost:8080/auth/login/',
+      {
+        email,
+        password
+      }
+    );
+
+    if (data._id) {
+      console.log(data._id);
+      props.history.push('/');
+    }
   }
 
   return (
