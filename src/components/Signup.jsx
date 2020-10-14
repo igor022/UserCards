@@ -67,6 +67,8 @@ const Signup = (props) => {
     );
 
     if (data._id) {
+      localStorage.setItem('id', data._id);
+      localStorage.setItem('jwt', data.token);
       props.history.push('/');
     }
   }

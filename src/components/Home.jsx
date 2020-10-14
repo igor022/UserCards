@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
+
 import Header from './Header';
 import Cards from './Cards';
 import { userApi } from '../api';
-
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({

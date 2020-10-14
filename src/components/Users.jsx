@@ -30,7 +30,7 @@ const Users = (props) => {
       const result = await userApi.getUsers();
       setUsers(result);
     } catch (error) {
-      props.history.push('/auth/login');
+      console.log(error);
     }
   }
 

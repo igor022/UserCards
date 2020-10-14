@@ -85,36 +85,38 @@ export default function CardItem(props) {
       <Card className={classes.card}>
         <CardHeader
           action={
-            <div>
-              <IconButton 
-                aria-label="settings"
-                ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-              >
-              <MoreVertIcon />  
-              </IconButton>
-              <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                          <MenuItem onClick={handleClose}>
-                            <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
-                          </MenuItem>
-                          <MenuItem onClick={() => props.handleDelete(user._id)}>Delete</MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </div>
+            localStorage.getItem('jwt') && (      
+              <div>
+                <IconButton 
+                  aria-label="settings"
+                  ref={anchorRef}
+                  aria-controls={open ? 'menu-list-grow' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleToggle}
+                >
+                <MoreVertIcon />  
+                </IconButton>
+                <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                          <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                            <MenuItem onClick={handleClose}>
+                              <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
+                            </MenuItem>
+                            <MenuItem onClick={() => props.handleDelete(user._id)}>Delete</MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </div>        
+            )
           }
           title={user.name}
           subheader={user.email}
