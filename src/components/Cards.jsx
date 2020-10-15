@@ -22,7 +22,7 @@ const Cards = (props) => {
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
         {
-          users
+          users && users.length
           ? 
           users
             .slice(0, props.cardsAmount)

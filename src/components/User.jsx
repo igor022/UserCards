@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { getUsers, editUser, deleteUser } from '../actions/userActions';
 import { userApi } from '../api';
+
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
+
 import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 import EditUserForm from './EditUserForm';
@@ -51,56 +53,19 @@ const useStyles = makeStyles((theme) => ({
 const User = (props) => {
   const classes = useStyles();
   
-  const [user, setUser] = useState(null);
-   
-  const getUsers = async () => {
-    try {
-      const data = await userApi.getUsers();
-      const userId = props.match.params.id;
-      const user = data.find((user) => user._id == userId);
-      if (!user) {
-        props.history.push('/404');
-        return;
-      }
-      setUser(user); 
-    } catch(err) {
-      throw(err);
-    }
-  }
-  
-  const editUser = async (edited) => {
-    try {
-      const editedUser = await userApi.editUser(edited);
-      setUser(editedUser);
-    } catch(err) {
-      throw(err);
-    }
-  }
+  const users = props.users;
 
-  const handleDelete = async () => {
-    try {
-      await userApi.deleteUser(user._id);
-      props.history.push('/users');
-    } catch(err) {
-      console.log(err);
-    }
-  }
+  const userId = props.match.params.id;
 
-  const addTag = (tag) => {
-    const edited = {...user};
-    edited.tags.push(tag);
-    editUser(edited);
-  }
+  let user;
 
-  const deleteTag = (tag) => {
-    const edited = {...user};
-    const tags = user.tags.filter((t) => t !== tag)
-    edited.tags = tags;
-    editUser(edited);
+  user = users?.find((user) => user._id === userId);
+  if (!user) {
+    props.history.push('/404');
   }
 
   useEffect(() => {
-    getUsers();
+    props.getUsers();
   }, []);
 
   return (
@@ -133,7 +98,7 @@ const User = (props) => {
                 
               </Grid>
             </Grid>
-            <Tags tags={user.tags} addTag={addTag} deleteTag={deleteTag} className={classes.tags}/>
+            <Tags tags={user.tags} className={classes.tags}/>
             <hr></hr>
             <div className={classes.aboutMe}>
               <Typography variant="h4" color="textPrimary" gutterBottom>
@@ -145,7 +110,7 @@ const User = (props) => {
             </div>
 
             <EditUserForm user={user} editUser={editUser}/>
-            <Button className={classes.deleteButton} onClick={handleDelete} variant="contained" color="secondary">
+            <Button className={classes.deleteButton} onClick={() => props.deleteUser(user._id)} variant="contained" color="secondary">
               Delete user
             </Button>
           </Paper>
@@ -157,4 +122,18 @@ const User = (props) => {
   );
 }
 
-export default withRouter(User);
+const mapStateToProps = (state) => {
+  return {
+    users: state.users.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: () => { dispatch(getUsers()) },
+    editUser: (edited) => { dispatch(editUser(edited)) },
+    deleteUser: (id) => { dispatch(deleteUser(id)) },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(User));

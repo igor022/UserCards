@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import { connect } from 'react-redux';
+
+import { getUsers } from '../actions/userActions';
 
 import Header from './Header';
 import Cards from './Cards';
-import { userApi } from '../api';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,42 +13,35 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Home = () => {
-  const [users, setUsers] = useState([]);
+const Home = (props) => {
   const classes = useStyles();
 
-  const getUsers = async () => {
-    try {
-      const result = await userApi.getUsers();
-      setUsers(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-
-  const handleDelete = async (id) => {
-    try {
-      const users = await userApi.deleteUser(id);
-      setUsers(users);
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
+  const users = props.users;
 
   useEffect(() => {
-    getUsers();
+    props.getUsers();
   }, []);
 
   return (
     <div>
       <Header />
       <div className={classes.homeCards}>
-        <Cards users={users} cardsAmount={3} handleDelete={handleDelete}/>
+        <Cards users={users} cardsAmount={3}/>
       </div>
     </div>
   );
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    users: state.users.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: () => { dispatch(getUsers())}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

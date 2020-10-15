@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import Cards from './Cards';
 import AddUserForm from './AddUserForm';
-import { userApi } from '../api';
-
+import { getUsers } from '../actions/userActions';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,61 +20,33 @@ const useStyles = makeStyles((theme) => ({
 
 const Users = (props) => {
   const classes = useStyles();
-  
-  const [users, setUsers] = useState([]);
 
-  const getUsers = async () => {
-    try {
-      const result = await userApi.getUsers();
-      setUsers(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const addUser = async (data) => {
-    const { name, email, description } = data;
-   
-    try {
-      const user = await axios.post(
-        'http://localhost:8080/users', 
-        { 
-          name,
-          email, 
-          description,
-          jwt: localStorage.getItem('jwt'),
-        },
-      );
-      getUsers();
-      return user;
-
-    } catch (err) {
-      throw(err);
-    }
-
-  }
-
-  const handleDelete = async (id) => {
-    try {
-      const users = await userApi.deleteUser(id);
-      setUsers(users);
-    } catch(err) {
-      console.log(err);
-    }
-  }
+  const users = props.users;
 
   useEffect(() => {
-    getUsers();
+    props.getUsers();
   }, []);
 
   return (
     <div className={classes.usersContent}>
       <Container className={classes.cardGrid} maxWidth="md">
-        <AddUserForm addUser={addUser}/>
-        <Cards users={users} handleDelete={handleDelete}/>
+        <AddUserForm />
+        <Cards users={users} />
       </Container>
     </div>
   );
 }
 
-export default withRouter(Users);
+const mapStateToProps = (state) => {
+  return {
+    users: state.users.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUsers: () => { dispatch(getUsers()) }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users);
