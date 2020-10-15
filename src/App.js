@@ -16,7 +16,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route exact path='/users' component={Users} />
+          <PrivateRoute exact path='/users' component={Users} />
           <PrivateRoute path='/users/:id' component={User}/>
           <Route path='/auth/signup' component={Signup} />
           <Route path='/auth/login' component={Login} />

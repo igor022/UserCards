@@ -42,11 +42,6 @@ const useStyles = makeStyles((theme) => ({
 const NavBar = (props) => {
   const classes = useStyles();
 
-
-  const handleClick = () => {
-    window.location.reload();
-  }
-
   const handleLogout = () => {
     localStorage.removeItem('id');
     localStorage.removeItem('jwt');
@@ -57,9 +52,7 @@ const NavBar = (props) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
-          
-
-          <NavLink onClick={handleClick} className={classes.navLink} to="/">
+          <NavLink className={classes.navLink} to="/">
             <Typography variant="h6" className={classes.title}>
               RoboClub
             </Typography>

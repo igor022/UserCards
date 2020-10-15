@@ -54,18 +54,24 @@ const Login = (props) => {
     e.preventDefault();
 
     const { email, password } = formFields;
-    const { data } = await axios.post(
-      'http://localhost:8080/auth/login/',
-      {
-        email,
-        password
-      }
-    );
+    try {
+      const { data } = await axios.post(
+        'http://localhost:8080/auth/login/',
+        {
+          email,
+          password
+        }
+      );
 
-    if (data._id) {
-      localStorage.setItem('id', data._id);
-      localStorage.setItem('jwt', data.token);
-      props.history.push('/');
+      console.log(data);
+      if (data._id) {
+        localStorage.setItem('id', data._id);
+        localStorage.setItem('jwt', data.token);
+        props.history.push('/');
+      }
+
+    } catch (err) {
+      console.log('Err', err);
     }
   }
 

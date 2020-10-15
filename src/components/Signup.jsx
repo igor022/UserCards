@@ -56,20 +56,23 @@ const Signup = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password } = formFields;
-    const { data } = await axios.post(
-      'http://localhost:8080/auth/signup/',
-      {
-        name,
-        email,
-        password
-      }
-    );
+    const { name, email, password, repeatPassword } = formFields;
 
-    if (data._id) {
-      localStorage.setItem('id', data._id);
-      localStorage.setItem('jwt', data.token);
-      props.history.push('/');
+    if (password === repeatPassword) {
+      const { data } = await axios.post(
+        'http://localhost:8080/auth/signup/',
+        {
+          name,
+          email,
+          password
+        }
+      );
+  
+      if (data._id) {
+        localStorage.setItem('id', data._id);
+        localStorage.setItem('jwt', data.token);
+        props.history.push('/');
+      }
     }
   }
 
