@@ -1,14 +1,14 @@
 import { GET_USERS_LOADING, GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from './actionTypes';
-import { userApi } from '../api';
+import api from '../api';
 
 export const addUser = (user) => async (dispatch) => {
   try {
-    const addedUser = await userApi.addUser(user);
+    const newUser = await api.addUser(user);
 
     dispatch({
       type: ADD_USER,
       payload: {
-        user: addedUser
+        user: newUser
       }
     });
 
@@ -22,7 +22,7 @@ export const getUsers = () => async (dispatch) => {
     dispatch({
       type: GET_USERS_LOADING,
     })
-    const users = await userApi.getUsers();
+    const users = await api.getUsers();
  
     dispatch({
       type: GET_USERS,
@@ -37,7 +37,7 @@ export const getUsers = () => async (dispatch) => {
 
 export const editUser = (user) => async(dispatch) => {
   try {
-    const editedUser = await userApi.editUser(user);
+    const editedUser = await api.editUser(user);
     dispatch({
       type: EDIT_USER,
       payload: {
@@ -51,7 +51,7 @@ export const editUser = (user) => async(dispatch) => {
 
 export const deleteUser = (id) => async (dispatch) => {
   try {
-    const user = await userApi.deleteUser(id);
+    const user = await api.deleteUser(id);
     dispatch({
       type: DELETE_USER,
       payload: {

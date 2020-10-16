@@ -32,7 +32,7 @@ const userReducer = (state = initState, {type, payload}) => {
       {
         const { user } = payload;
         const users = [...state.users];
-        users.unshift(user.data);
+        users.unshift(user);
         return {
           ...state,
           users
@@ -55,7 +55,6 @@ const userReducer = (state = initState, {type, payload}) => {
 
     case DELETE_USER: 
       {
-        console.log(state.users);
         const { id } = payload;
         const users = state.users.filter((u) => u._id !== id);
         return {

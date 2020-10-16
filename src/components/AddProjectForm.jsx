@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { addUser } from '../actions/userActions';
+import { addProject } from '../actions/projectActions';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -23,7 +23,9 @@ const AddProjectForm = (props) => {
 
   const [formFields, setFormFields] = useState({
     name: '',
-    email: '',
+    status: '',
+    price: '',
+    devs: [],  
     description: ''
   });
 
@@ -36,7 +38,7 @@ const AddProjectForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.addUser(formFields);
+    props.addProject(formFields);
     handleClose();
   }
 
@@ -100,7 +102,7 @@ const AddProjectForm = (props) => {
                   onChange={handleChange}
                 />
                 <TextField
-                  id="about"
+                  id="description"
                   margin="dense"
                   label="About project"
                   multiline
@@ -123,10 +125,16 @@ const AddProjectForm = (props) => {
   );
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    addUser: (user) => { dispatch(addUser(user)) }
+    users: state.users,
   }
 }
 
-export default connect(null, mapDispatchToProps)(withRouter(AddProjectForm));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addProject: (project) => { dispatch(addProject(project)) }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddProjectForm));

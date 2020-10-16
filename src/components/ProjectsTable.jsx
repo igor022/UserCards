@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { connect } from 'react-redux';
+
+import { getProjects } from '../actions/projectActions';
+
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,6 +24,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -213,14 +218,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProjectsTable = () => {
+const ProjectsTable = (props) => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('calories');
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const rows = props.projects;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -269,6 +276,10 @@ const ProjectsTable = () => {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+
+  useEffect(() => {
+    props.getProjects();
+  }, [])
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -320,10 +331,10 @@ const ProjectsTable = () => {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">{row.devs}</TableCell>
+                      <TableCell align="right">action</TableCell>
                     </TableRow>
                   );
                 })}
@@ -353,4 +364,16 @@ const ProjectsTable = () => {
   );
 }
 
-export default ProjectsTable;
+const mapStateToProps = (state) => {
+  return {
+    projects: state.projects.projects,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getProjects: () => { dispatch(getProjects()) },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectsTable);
