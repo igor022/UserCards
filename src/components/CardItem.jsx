@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { deleteUser } from '../actions/userActions';
+
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -15,7 +20,6 @@ import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function CardItem(props) {
+const CardItem = (props) => {
   const classes = useStyles();
   const user = props.user;
   
@@ -108,7 +112,7 @@ export default function CardItem(props) {
                             <MenuItem onClick={handleClose}>
                               <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
                             </MenuItem>
-                            <MenuItem onClick={() => props.handleDelete(user._id)}>Delete</MenuItem>
+                            <MenuItem onClick={() => props.deleteUser(user._id)}>Delete</MenuItem>
                           </MenuList>
                         </ClickAwayListener>
                       </Paper>
@@ -129,7 +133,7 @@ export default function CardItem(props) {
         <CardContent className={classes.cardContent}>
           <Typography>
             {
-              user.description.length > 30
+              user.description.length > 40
               ? `${user.description.slice(0, 40)}...`
               : user.description
             }       
@@ -139,3 +143,11 @@ export default function CardItem(props) {
     </Grid>
   )
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteUser: (id) => { dispatch(deleteUser(id))}
+  }
+}
+
+export default connect(null, mapDispatchToProps)(CardItem);

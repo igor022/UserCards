@@ -1,12 +1,15 @@
-import React, { useState, createRef } from 'react';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { addUser } from '../actions/userActions';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,8 +21,25 @@ const useStyles = makeStyles((theme) => ({
 const AddUserForm = (props) => {
   const [open, setOpen] = useState(false);
 
-  const [form] = useState(createRef());
-  const { addUser } = props;
+  const [formFields, setFormFields] = useState({
+    name: '',
+    email: '',
+    description: ''
+  });
+
+  const handleChange = (e) => {
+    setFormFields({
+      ...formFields,
+      [e.target.id]: e.target.value,
+    });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.addUser(formFields);
+    handleClose();
+  }
+
   const classes = useStyles();
 
   const handleClickOpen = () => {
@@ -30,22 +50,6 @@ const AddUserForm = (props) => {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
-    const { name, email, description } = form.current;
-    await addUser({
-      name: name.value,
-      email: email.value,
-      description: description.value,
-    })
-    handleClose();
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleAdd();
-  }
-
-
   return (
     <div>
       <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
@@ -53,52 +57,61 @@ const AddUserForm = (props) => {
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add user</DialogTitle>
-        <DialogContent>
-          <form 
+          <form
             onSubmit={handleSubmit} 
             className={classes.addForm} 
             autoComplete="off"
-            ref={form}
-          >
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              fullWidth
-              required
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Email Address"
-              type="email"
-              fullWidth
-              required
-            />
-            <TextField
-              id="description"
-              margin="dense"
-              label="About me"
-              multiline
-              rowsMax={4}
-              fullWidth
-            />
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Add
-          </Button>
-        </DialogActions>
+          > 
+            <DialogContent>
+                
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Name"
+                  type="text"
+                  fullWidth
+                  required
+                  onChange={handleChange}
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  fullWidth
+                  required
+                  onChange={handleChange}
+                />
+                <TextField
+                  id="description"
+                  margin="dense"
+                  label="About me"
+                  multiline
+                  rowsMax={4}
+                  fullWidth
+                  onChange={handleChange}
+                />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
 }
 
-export default withRouter(AddUserForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addUser: (user) => { dispatch(addUser(user)) }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(withRouter(AddUserForm));

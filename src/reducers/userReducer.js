@@ -19,21 +19,34 @@ const userReducer = (state = initState, {type, payload}) => {
 
     case ADD_USER: 
       {
-
+        const { user } = payload;
+        const users = [...state.users];
+        users.unshift(user);
+        return {
+          ...state,
+          users
+        }
       }
       break;
 
     case EDIT_USER:
       {
-
+        const { user } = payload;
+        const users = [...state.users];
+        const userToEdit = users.findIndex((u) => u._id === user._id);
+        users.splice(userToEdit, 1, user);
+        return {
+          ...state,
+          users
+        }
       }
       break;
 
     case DELETE_USER: 
       {
         console.log(state.users);
-        const { user } = payload;
-        const users = state.users.filter((u) => u._id !== user._id);
+        const { id } = payload;
+        const users = state.users.filter((u) => u._id !== id);
         return {
           ...state,
           users

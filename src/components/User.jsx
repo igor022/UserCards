@@ -68,6 +68,11 @@ const User = (props) => {
     props.getUsers();
   }, []);
 
+  const handleDelete = (id) => {
+    props.deleteUser(id);
+    props.history.push('/users');
+  }
+
   return (
     <div className={classes.usersContent}>
     { 
@@ -109,8 +114,8 @@ const User = (props) => {
               </Typography>
             </div>
 
-            <EditUserForm user={user} editUser={editUser}/>
-            <Button className={classes.deleteButton} onClick={() => props.deleteUser(user._id)} variant="contained" color="secondary">
+            <EditUserForm user={user}/>
+            <Button className={classes.deleteButton} onClick={() => handleDelete(user._id)} variant="contained" color="secondary">
               Delete user
             </Button>
           </Paper>

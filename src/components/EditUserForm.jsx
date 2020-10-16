@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+
+import { editUser } from '../actions/userActions';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const EditUserForm = (props) => {
   const [open, setOpen] = useState(false);
 
-  const { editUser, user } = props;
+  const { user } = props;
   const [formFields, setFormFields] = useState({
     name: user.name,
     email: user.email,
@@ -44,7 +48,7 @@ const EditUserForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    editUser({ ...user, ...formFields });
+    props.editUser({ ...user, ...formFields });
     handleClose();
   }
 
@@ -56,57 +60,64 @@ const EditUserForm = (props) => {
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Edit user</DialogTitle>
-        <DialogContent>
-          <form 
-            onSubmit={handleSubmit} 
-            className={classes.addForm} 
-            autoComplete="off"
-          >
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              value={formFields.name}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Email Address"
-              type="email"
-              value={formFields.email}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
-            <TextField
-              id="description"
-              margin="dense"
-              label="About me"
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.description}
-              onChange={handleChange}
-            />
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Edit
-          </Button>
-        </DialogActions>
+        <form 
+          onSubmit={handleSubmit} 
+          className={classes.addForm} 
+          autoComplete="off"
+        >
+          <DialogContent>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Name"
+                type="text"
+                value={formFields.name}
+                fullWidth
+                required
+                onChange={handleChange}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="email"
+                label="Email Address"
+                type="email"
+                value={formFields.email}
+                fullWidth
+                required
+                onChange={handleChange}
+              />
+              <TextField
+                id="description"
+                margin="dense"
+                label="About me"
+                multiline
+                rowsMax={4}
+                fullWidth
+                value={formFields.description}
+                onChange={handleChange}
+              />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} color="primary">
+              Edit
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
 }
 
-export default withRouter(EditUserForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    editUser: (user) => { dispatch(editUser(user)) }
+  }
+}
+
+
+export default connect(null, mapDispatchToProps)(withRouter(EditUserForm));

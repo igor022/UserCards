@@ -3,12 +3,12 @@ import { userApi } from '../api';
 
 export const addUser = (user) => async (dispatch) => {
   try {
-    const user = await userApi.addUser(user);
+    const addedUser = await userApi.addUser(user);
 
     dispatch({
       type: ADD_USER,
       payload: {
-        user
+        user: addedUser
       }
     });
 
@@ -34,12 +34,11 @@ export const getUsers = () => async (dispatch) => {
 
 export const editUser = (user) => async(dispatch) => {
   try {
-    await userApi.editUser(user);
-    const users = await userApi.getUsers();
+    const editedUser = await userApi.editUser(user);
     dispatch({
-      type: GET_USERS,
+      type: EDIT_USER,
       payload: {
-        users
+        user: editedUser
       }
     });
   } catch(err) {
@@ -53,7 +52,7 @@ export const deleteUser = (id) => async (dispatch) => {
     dispatch({
       type: DELETE_USER,
       payload: {
-        user
+        id: user._id
       }
     });
   } catch(err) {
