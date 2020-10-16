@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import NavBar from './NavBar';
 import ProjectsTable from './ProjectsTable';
+import AddProjectForm from './AddProjectForm';
 
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,11 +22,12 @@ const Projects = (props) => {
 
   return(
     <div className={classes.usersContent}>
-        {
-          props.isLoading 
-          ? <h2>Loading...</h2>
-          : <ProjectsTable />
-        }
+      <AddProjectForm/>
+      {
+        props.isLoading 
+        ? <h2>Loading...</h2>
+        : <ProjectsTable />
+      }
     </div>
   )
 }
