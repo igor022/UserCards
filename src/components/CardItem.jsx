@@ -79,10 +79,8 @@ const CardItem = (props) => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [open]);
-
 
   return(
     <Grid item xs={12} sm={6} md={4}>

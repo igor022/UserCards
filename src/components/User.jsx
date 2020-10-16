@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getUsers, editUser, deleteUser } from '../actions/userActions';
-import { userApi } from '../api';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -59,9 +58,11 @@ const User = (props) => {
 
   let user;
 
-  user = users?.find((user) => user._id === userId);
-  if (!user) {
-    props.history.push('/404');
+  if (users && users.length) {
+    user = users.find((user) => user._id === userId);
+    if (!user) {
+      props.history.push('/404');
+    }
   }
 
   useEffect(() => {
@@ -71,6 +72,19 @@ const User = (props) => {
   const handleDelete = (id) => {
     props.deleteUser(id);
     props.history.push('/users');
+  }
+
+  const addTag = (tag) => {
+    const edited = {...user};
+    edited.tags.push(tag);
+    props.editUser(edited);
+  }
+
+  const deleteTag = (tag) => {
+    const edited = {...user};
+    const tags = user.tags.filter((t) => t !== tag)
+    edited.tags = tags;
+    props.editUser(edited);
   }
 
   return (
@@ -103,7 +117,7 @@ const User = (props) => {
                 
               </Grid>
             </Grid>
-            <Tags tags={user.tags} className={classes.tags}/>
+            <Tags tags={user.tags} className={classes.tags} addTag={addTag} deleteTag={deleteTag}/>
             <hr></hr>
             <div className={classes.aboutMe}>
               <Typography variant="h4" color="textPrimary" gutterBottom>
@@ -136,7 +150,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getUsers: () => { dispatch(getUsers()) },
-    editUser: (edited) => { dispatch(editUser(edited)) },
+    editUser: (user) => { dispatch(editUser(user)) },
     deleteUser: (id) => { dispatch(deleteUser(id)) },
   }
 }

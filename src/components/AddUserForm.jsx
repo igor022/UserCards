@@ -75,7 +75,6 @@ const AddUserForm = (props) => {
                   onChange={handleChange}
                 />
                 <TextField
-                  autoFocus
                   margin="dense"
                   id="email"
                   label="Email Address"

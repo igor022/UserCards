@@ -21,7 +21,7 @@ const userReducer = (state = initState, {type, payload}) => {
       {
         const { user } = payload;
         const users = [...state.users];
-        users.unshift(user);
+        users.unshift(user.data);
         return {
           ...state,
           users
