@@ -1,4 +1,4 @@
-import { GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from './actionTypes';
+import { GET_USERS_LOADING, GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from './actionTypes';
 import { userApi } from '../api';
 
 export const addUser = (user) => async (dispatch) => {
@@ -19,6 +19,9 @@ export const addUser = (user) => async (dispatch) => {
 
 export const getUsers = () => async (dispatch) => {
   try {
+    dispatch({
+      type: GET_USERS_LOADING,
+    })
     const users = await userApi.getUsers();
  
     dispatch({

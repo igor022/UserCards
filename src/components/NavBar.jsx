@@ -61,6 +61,9 @@ const NavBar = (props) => {
             && (
               <div>
                 <Button color="inherit">
+                  <NavLink className={classes.navLink} to="/projects">Projects</NavLink>
+                </Button>
+                <Button color="inherit">
                   <NavLink className={classes.navLink} to="/users">Users</NavLink>
                 </Button>
                 <Button className={classes.auth} color="inherit" onClick={handleLogout}>

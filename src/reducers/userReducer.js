@@ -1,18 +1,29 @@
-import { GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from '../actions/actionTypes';
+import { GET_USERS_LOADING, GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from '../actions/actionTypes';
 
 
 const initState = {
   users: [],
+  isLoading: false,
 }
 
 const userReducer = (state = initState, {type, payload}) => {
   switch (type) {
+    case GET_USERS_LOADING:
+      {
+        return {
+          ...state,
+          isLoading: true
+        }
+      }
+      break;
+
     case GET_USERS:
       {
         const users = payload.users;
         return {
           ...state,
-          users
+          users,
+          isLoading: false
         }
       }
       break;
@@ -53,7 +64,7 @@ const userReducer = (state = initState, {type, payload}) => {
         }
       }
       break;
-
+    
     default:
       break;
   }

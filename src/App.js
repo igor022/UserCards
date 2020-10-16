@@ -4,6 +4,7 @@ import Home from './components/Home';
 import User from './components/User';
 import NavBar from './components/NavBar';
 import Users from './components/Users';
+import Projects from './components/Projects';
 import NotFound from './components/NotFound';
 import Signup from './components/Signup';
 import Login from './components/Login';
@@ -16,6 +17,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path='/' component={Home} />
+          <PrivateRoute exact path='/projects' component={Projects} /> 
           <PrivateRoute exact path='/users' component={Users} />
           <PrivateRoute path='/users/:id' component={User}/>
           <Route path='/auth/signup' component={Signup} />
