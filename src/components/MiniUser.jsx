@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import { deepOrange } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,17 +12,13 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
+  icon: {
     backgroundColor: deepOrange[500],
-  },
-  purple: {
-    color: theme.palette.getContrastText(deepPurple[500]),
-    backgroundColor: deepPurple[500],
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
   },
   navLink: {
     textDecoration: 'none',
-    color: 'black',
+    color: 'white'
   },
 }));
 
@@ -31,9 +27,11 @@ const MiniUser = (props) => {
 
   return (
     <div className={classes.root}>
-      <Avatar>
-        <Link className={classes.navLink} to={`/users/${props.id}`}>{props.name.split(' ').map((name) => name[0]).slice(0, 2)}</Link>
-      </Avatar>
+      <Link alt={props.name} className={classes.navLink} to={`/users/${props.id}`}>
+        <Avatar className={classes.icon} src={`https://robohash.org/${props.id}`}>
+          {props.name.split(' ').map((name) => name[0]).slice(0, 2)}
+        </Avatar>
+      </Link>
     </div>
   );
 }

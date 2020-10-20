@@ -5,6 +5,7 @@ import { getProjects, editProject, deleteProject } from '../actions/projectActio
 import { getUsers } from '../actions/userActions';
 
 import MiniUser from './MiniUser';
+import Status from './Status';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
   devs: {
     display: 'flex',
+    flexWrap: 'wrap'
   }
 }));
 
@@ -82,10 +84,6 @@ const Project = (props) => {
 
     developers = project.devs.map((dev) => users.find((u) => u._id === dev))
       .filter((item) => item !== undefined);
-
-    console.log('users', users);
-    console.log('project', project);
-    console.log('devs', developers)
   }
 
 
@@ -104,7 +102,7 @@ const Project = (props) => {
   return (
     <div className={classes.usersContent}>
       {
-        project && developers.length
+        project && developers
           ?
           <Container maxWidth="md">
             <Paper>
@@ -113,23 +111,24 @@ const Project = (props) => {
 
                 <Box className={classes.projectTitle}>
                   <Typography variant="h3" color="textPrimary" gutterBottom>
-                    {project.name}
+                    Project: {project.name}
                   </Typography>
                   <Typography variant="h5" color="textSecondary" paragraph>
-                    {project.status}
+                    <Status name={project.status} />
                   </Typography>
                 </Box>
-                <Typography variant="h5" color="textPrimary" >
+                <Typography variant="h6" color="textPrimary" >
                   Price:
                 </Typography>
                 <Typography className={classes.price} variant="h5" paragraph>
-                  {project.price}$
+                  ${project.price}
                 </Typography>
-                <Typography variant="h5" color="textPrimary">
-                  Developers:
+                <hr></hr>
+                <Typography variant="h6" color="textPrimary">
+                  {developers.length} developers:
                 </Typography>
                 <Box className={classes.devs}>
-                  {developers.map((dev, i) => (
+                  {developers.map((dev) => (
                     <MiniUser key={dev._id} id={dev._id} name={dev.name} />
                   ))}
                 </Box>

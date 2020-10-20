@@ -14,9 +14,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 
 import { withRouter } from 'react-router-dom';
@@ -42,18 +40,9 @@ const MenuProps = {
   },
 };
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 const AddProjectForm = (props) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [open, setOpen] = useState(false);
 
@@ -81,7 +70,7 @@ const AddProjectForm = (props) => {
     });
   }
 
-  const changePerson = (event) => {
+  const changeDevs = (event) => {
     console.log(personName)
     setPersonName(event.target.value);
   };
@@ -153,7 +142,7 @@ const AddProjectForm = (props) => {
                 id="devs"
                 multiple
                 value={personName}
-                onChange={changePerson}
+                onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>

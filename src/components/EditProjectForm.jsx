@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { editProject } from '../actions/projectActions';
+import { getUsers } from '../actions/userActions';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -13,9 +14,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 
 import { withRouter } from 'react-router-dom';
@@ -23,6 +22,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   editButton: {
+    width: '100%'
+  },
+  formControl: {
     width: '100%'
   }
 }));
@@ -38,30 +40,29 @@ const MenuProps = {
   },
 };
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 const EditProjectForm = (props) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [open, setOpen] = useState(false);
 
-  const { project } = props;
+  const { users, project } = props;
   const [formFields, setFormFields] = useState({
     name: project.name,
     status: project.status,
     price: project.price,
-    devs: project.devs,
-    description: project.description
+    description: project.description,
   });
 
+  const selectedDevs = users.map((user) => {
+    const developer = (project.devs.find((dev) => dev._id === user._id));
+    if (developer) {
+      return user;
+    }
+  }).filter((dev) => dev !== undefined);
+
+  console.log('selectedDevs', selectedDevs);
+  const [personName, setPersonName] = useState(selectedDevs);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -78,18 +79,23 @@ const EditProjectForm = (props) => {
     });
   }
 
+  const changeDevs = (event) => {
+    console.log(personName)
+    setPersonName(event.target.value);
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.editProject({ ...project, ...formFields });
+    const devs = personName.map((person) => person._id);
+    props.editProject({ ...formFields, devs });
     handleClose();
   }
 
 
-  const [personName, setPersonName] = React.useState([]);
-
-  const changePerson = (event) => {
-    setPersonName(event.target.value);
-  };
+  useEffect(() => {
+    props.getUsers();
+  }, []);
 
   return (
     <div>
@@ -97,7 +103,7 @@ const EditProjectForm = (props) => {
         Edit project
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Edit project</DialogTitle>
+        <DialogTitle id="form-dialog-title">Add project</DialogTitle>
         <form
           onSubmit={handleSubmit}
           className={classes.addForm}
@@ -133,31 +139,32 @@ const EditProjectForm = (props) => {
               multiline
               rowsMax={4}
               fullWidth
-              value={formFields.description}
+              value={formFields.price}
               onChange={handleChange}
             />
 
             <FormControl className={classes.formControl}>
-              <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+              <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
               <Select
-                labelId="demo-mutiple-chip-label"
-                id="demo-mutiple-chip"
+                labelId="devs"
+                id="devs"
                 multiple
                 value={personName}
-                onChange={changePerson}
+                onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} className={classes.chip} />
+                    {console.log('Selected', selected)}
+                    {selected.map((user) => (
+                      <Chip key={user._id} label={user.name} className={classes.chip} />
                     ))}
                   </div>
                 )}
                 MenuProps={MenuProps}
               >
-                {project.devs.map((name) => (
-                  <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-                    {name}
+                {props.users.map((user) => (
+                  <MenuItem key={user._id} value={user}>
+                    {user.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -180,7 +187,7 @@ const EditProjectForm = (props) => {
               Cancel
             </Button>
             <Button onClick={handleSubmit} color="primary">
-              Edit
+              Add
             </Button>
           </DialogActions>
         </form>
@@ -189,11 +196,18 @@ const EditProjectForm = (props) => {
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    users: state.users.users,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
+    getUsers: () => { dispatch(getUsers()) },
     editProject: (project) => { dispatch(editProject(project)) }
   }
 }
 
 
-export default connect(null, mapDispatchToProps)(withRouter(EditProjectForm));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditProjectForm));
