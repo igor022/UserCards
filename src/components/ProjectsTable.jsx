@@ -28,6 +28,7 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Box from '@material-ui/core/Box';
 import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   action: {
-    margin: theme.spacing(0, 1),
+
   },
   navLink: {
     textDecoration: 'none',
@@ -85,14 +86,20 @@ const ProjectsTable = (props) => {
   const { projects, users } = props;
 
 
-  const projectsWithDevs = [...projects];
-  projectsWithDevs.forEach((project) => {
+  const projectsWithDevs = projects.map((project) => {
     const developers = project.devs.map((dev) => users.find((u) => u._id === dev))
       .filter((item) => item !== undefined);
 
-    project.devs = developers;
-    return project;
+    return {
+      ...project,
+      devs: developers
+    }
+
   });
+  console.log('Users', users);
+  console.log('Projects', projects);
+  console.log('With devs', projectsWithDevs);
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -128,7 +135,7 @@ const ProjectsTable = (props) => {
                     <TableCell align="left">Status</TableCell>
                     <TableCell align="left">Price</TableCell>
                     <TableCell align="left">Developers</TableCell>
-                    <TableCell align="left">Actions</TableCell>
+                    <TableCell align="right">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody className={classes.tableBody}>
@@ -161,9 +168,13 @@ const ProjectsTable = (props) => {
                               }
                             </Box>
                           </TableCell>
-                          <TableCell align="left">
-                            <EditIcon className={classes.action} />
-                            <DeleteIcon onClick={() => props.deleteProject(project._id)} className={classes.action} />
+                          <TableCell align="right">
+                            <IconButton className={classes.action} >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton className={classes.action} onClick={() => props.deleteProject(project._id)}>
+                              <DeleteIcon />
+                            </IconButton>
                           </TableCell>
                         </TableRow>
                       );
