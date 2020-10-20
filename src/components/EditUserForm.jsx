@@ -60,44 +60,43 @@ const EditUserForm = (props) => {
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Edit user</DialogTitle>
-        <form 
-          onSubmit={handleSubmit} 
-          className={classes.addForm} 
+        <form
+          onSubmit={handleSubmit}
+          className={classes.addForm}
           autoComplete="off"
         >
           <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Name"
-                type="text"
-                value={formFields.name}
-                fullWidth
-                required
-                onChange={handleChange}
-              />
-              <TextField
-                autoFocus
-                margin="dense"
-                id="email"
-                label="Email Address"
-                type="email"
-                value={formFields.email}
-                fullWidth
-                required
-                onChange={handleChange}
-              />
-              <TextField
-                id="description"
-                margin="dense"
-                label="About me"
-                multiline
-                rowsMax={4}
-                fullWidth
-                value={formFields.description}
-                onChange={handleChange}
-              />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              value={formFields.name}
+              fullWidth
+              required
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              id="email"
+              label="Email Address"
+              type="email"
+              value={formFields.email}
+              fullWidth
+              required
+              onChange={handleChange}
+            />
+            <TextField
+              id="description"
+              margin="dense"
+              label="About me"
+              multiline
+              rowsMax={4}
+              fullWidth
+              value={formFields.description}
+              onChange={handleChange}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">

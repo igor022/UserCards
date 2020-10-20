@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './components/Home';
+import Project from './components/Project';
 import User from './components/User';
 import NavBar from './components/NavBar';
 import Users from './components/Users';
@@ -18,6 +19,7 @@ function App() {
         <Switch>
           <Route exact path='/' component={Home} />
           <PrivateRoute exact path='/projects' component={Projects} /> 
+          <PrivateRoute path='/projects/:id' component={Project} />
           <PrivateRoute exact path='/users' component={Users} />
           <PrivateRoute path='/users/:id' component={User}/>
           <Route path='/auth/signup' component={Signup} />

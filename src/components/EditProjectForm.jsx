@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import { addProject } from '../actions/projectActions';
-import { getUsers } from '../actions/userActions';
+import { editProject } from '../actions/projectActions';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -23,10 +22,7 @@ import { withRouter } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  addButton: {
-    margin: theme.spacing(2, 0, 2),
-  },
-  formControl: {
+  editButton: {
     width: '100%'
   }
 }));
@@ -51,7 +47,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-const AddProjectForm = (props) => {
+const EditProjectForm = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -59,10 +55,11 @@ const AddProjectForm = (props) => {
 
   const { project } = props;
   const [formFields, setFormFields] = useState({
-    name: '',
-    status: '',
-    price: '',
-    description: ''
+    name: project.name,
+    status: project.status,
+    price: project.price,
+    devs: project.devs,
+    description: project.description
   });
 
 
@@ -81,32 +78,26 @@ const AddProjectForm = (props) => {
     });
   }
 
-  const changePerson = (event) => {
-    console.log(personName)
-    setPersonName(event.target.value);
-  };
-
-  const [personName, setPersonName] = useState([]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const devs = personName.map((person) => person._id);
-    props.addProject({ ...formFields, devs });
+    props.editProject({ ...project, ...formFields });
     handleClose();
   }
 
 
-  useEffect(() => {
-    props.getUsers();
-  }, []);
+  const [personName, setPersonName] = React.useState([]);
+
+  const changePerson = (event) => {
+    setPersonName(event.target.value);
+  };
 
   return (
     <div>
-      <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
-        Add project
+      <Button className={classes.editButton} variant="contained" color="primary" onClick={handleClickOpen}>
+        Edit project
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add project</DialogTitle>
+        <DialogTitle id="form-dialog-title">Edit project</DialogTitle>
         <form
           onSubmit={handleSubmit}
           className={classes.addForm}
@@ -142,32 +133,31 @@ const AddProjectForm = (props) => {
               multiline
               rowsMax={4}
               fullWidth
-              value={formFields.price}
+              value={formFields.description}
               onChange={handleChange}
             />
 
             <FormControl className={classes.formControl}>
-              <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
+              <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
               <Select
-                labelId="devs"
-                id="devs"
+                labelId="demo-mutiple-chip-label"
+                id="demo-mutiple-chip"
                 multiple
                 value={personName}
                 onChange={changePerson}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
-                    {console.log('Selected', selected)}
-                    {selected.map((user) => (
-                      <Chip key={user._id} label={user.name} className={classes.chip} />
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} className={classes.chip} />
                     ))}
                   </div>
                 )}
                 MenuProps={MenuProps}
               >
-                {props.users.map((user) => (
-                  <MenuItem key={user._id} value={user}>
-                    {user.name}
+                {project.devs.map((name) => (
+                  <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
+                    {name}
                   </MenuItem>
                 ))}
               </Select>
@@ -190,7 +180,7 @@ const AddProjectForm = (props) => {
               Cancel
             </Button>
             <Button onClick={handleSubmit} color="primary">
-              Add
+              Edit
             </Button>
           </DialogActions>
         </form>
@@ -199,18 +189,11 @@ const AddProjectForm = (props) => {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.users.users
-  }
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUsers: () => { dispatch(getUsers()) },
-    addProject: (project) => { dispatch(addProject(project)) }
+    editProject: (project) => { dispatch(editProject(project)) }
   }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddProjectForm));
+export default connect(null, mapDispatchToProps)(withRouter(EditProjectForm));
