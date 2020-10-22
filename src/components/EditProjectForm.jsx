@@ -21,11 +21,11 @@ import { withRouter } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  editButton: {
-    width: '100%'
-  },
   formControl: {
     width: '100%'
+  },
+  statusSelect: {
+    marginTop: theme.spacing(2),
   }
 }));
 
@@ -40,37 +40,24 @@ const MenuProps = {
   },
 };
 
+const statuses = [
+  'None', 'Active', 'Pending', 'Done', 'Closed'
+]
 
 const EditProjectForm = (props) => {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const { project } = props;
 
-  const { users, project } = props;
+  const [status, setStatus] = useState(project.status)
+
   const [formFields, setFormFields] = useState({
     name: project.name,
-    status: project.status,
     price: project.price,
     description: project.description,
   });
 
-  const selectedDevs = users.map((user) => {
-    const developer = (project.devs.find((dev) => dev._id === user._id));
-    if (developer) {
-      return user;
-    }
-  }).filter((dev) => dev !== undefined);
-
-  console.log('selectedDevs', selectedDevs);
-  const [personName, setPersonName] = useState(selectedDevs);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [devNames, setDevNames] = useState([]);
 
   const handleChange = (e) => {
     setFormFields({
@@ -79,19 +66,21 @@ const EditProjectForm = (props) => {
     });
   }
 
-  const changeDevs = (event) => {
-    console.log(personName)
-    setPersonName(event.target.value);
+  const changeDevs = (e) => {
+    setDevNames(e.target.value);
   };
 
+  const changeStatus = (e) => {
+    setStatus(e.target.value);
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const devs = personName.map((person) => person._id);
-    props.editProject({ ...formFields, devs });
-    handleClose();
+    const devs = devNames.map((dev) => dev._id);
+    props.editProject({ ...project, ...formFields, devs, status });
+    props.handleClose();
   }
-
+  console.log(props.open);
 
   useEffect(() => {
     props.getUsers();
@@ -99,11 +88,9 @@ const EditProjectForm = (props) => {
 
   return (
     <div>
-      <Button className={classes.editButton} variant="contained" color="primary" onClick={handleClickOpen}>
-        Edit project
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add project</DialogTitle>
+  
+      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Edit project</DialogTitle>
         <form
           onSubmit={handleSubmit}
           className={classes.addForm}
@@ -121,16 +108,21 @@ const EditProjectForm = (props) => {
               required
               onChange={handleChange}
             />
-            <TextField
-              margin="dense"
-              id="status"
-              label="Status"
-              type="text"
-              value={formFields.email}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
+            <FormControl className={classes.formControl}>
+              <InputLabel id="statusLabel">Status</InputLabel>
+              <Select 
+                labelId="statusLabel"           
+                id="status"
+                value={status}
+                onChange={changeStatus}
+              >
+                {
+                  statuses.map((status) => (
+                    <MenuItem value={status}>{status}</MenuItem>
+                  ))
+                }
+              </Select>
+            </FormControl>
             <TextField
               id="price"
               margin="dense"
@@ -146,10 +138,10 @@ const EditProjectForm = (props) => {
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
               <Select
-                labelId="devs"
+                labelId="demo-mutiple-chip-label"
                 id="devs"
                 multiple
-                value={personName}
+                value={devNames}
                 onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
@@ -183,11 +175,11 @@ const EditProjectForm = (props) => {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
             <Button onClick={handleSubmit} color="primary">
-              Add
+              Edit
             </Button>
           </DialogActions>
         </form>

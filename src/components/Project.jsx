@@ -63,7 +63,10 @@ const useStyles = makeStyles((theme) => ({
   devs: {
     display: 'flex',
     flexWrap: 'wrap'
-  }
+  },
+  editButton: {
+    width: '100%'
+  },
 }));
 
 const Project = (props) => {
@@ -85,7 +88,17 @@ const Project = (props) => {
     developers = project.devs.map((dev) => users.find((u) => u._id === dev))
       .filter((item) => item !== undefined);
   }
+  
 
+  const [open, setOpen] = useState(false);
+
+  const changeOpen = (open) => {
+    setOpen(open);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   useEffect(() => {
@@ -106,9 +119,7 @@ const Project = (props) => {
           ?
           <Container maxWidth="md">
             <Paper>
-
               <Box className={classes.profile}>
-
                 <Box className={classes.projectTitle}>
                   <Typography variant="h3" color="textPrimary" gutterBottom>
                     Project: {project.name}
@@ -143,7 +154,10 @@ const Project = (props) => {
                   </Typography>
                 </div>
 
-                <EditProjectForm project={project} />
+                <Button className={classes.editButton} variant="contained" color="primary" onClick={() => changeOpen(true)}>
+                  Edit project
+                </Button>
+                <EditProjectForm handleClose={handleClose} open={open} project={{...project, devs: developers}} />
                 <Button className={classes.deleteButton} onClick={() => handleDelete(project._id)} variant="contained" color="secondary">
                   Delete project
                 </Button>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import { getProjects } from '../actions/projectActions';
 import { getUsers, editUser, deleteUser } from '../actions/userActions';
 
 import Container from '@material-ui/core/Container';
@@ -9,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-
+import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 import EditUserForm from './EditUserForm';
@@ -46,13 +49,27 @@ const useStyles = makeStyles((theme) => ({
   aboutText: {
     textAlign: 'justify',
     overflowWrap: 'break-word',
-  }
+  },
+  projects: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    margin: theme.spacing(0, 0, 1),
+    padding: theme.spacing(0.5),
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
+  navLink: {
+    textDecoration: 'none',
+  },
 }));
 
 const User = (props) => {
   const classes = useStyles();
   
-  const users = props.users;
+  const {users, projects} = props;
 
   const userId = props.match.params.id;
 
@@ -65,7 +82,19 @@ const User = (props) => {
     }
   }
 
+  let devProjects = [];
+  if (projects && user) {
+    devProjects = projects.map((project) => {
+      if(project.devs.find((dev) => dev === user._id)) {
+        return project;
+      }
+    })
+    .filter((item) => item !== undefined);
+    console.log('devProjects', devProjects);
+  }
+
   useEffect(() => {
+    props.getProjects();
     props.getUsers();
   }, []);
 
@@ -119,6 +148,24 @@ const User = (props) => {
             </Grid>
             <Tags tags={user.tags} className={classes.tags} addTag={addTag} deleteTag={deleteTag}/>
             <hr></hr>
+            <Typography variant="h6"  color="textPrimary">
+              Projects:
+            </Typography>
+            <ul className={classes.projects}>
+              {
+                devProjects.map((project) => (
+                  <li key={project._id}>
+                    <Link className={classes.navLink} to={`/projects/${project._id}`}>
+                      <Chip
+                        label={project.name}
+                        className={classes.chip}
+                      />
+                    </Link>
+                  </li>
+                ))
+              } 
+            </ul>          
+            <hr></hr>
             <div className={classes.aboutMe}>
               <Typography variant="h4" color="textPrimary" gutterBottom>
                 About me
@@ -143,12 +190,14 @@ const User = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    projects: state.projects.projects,
     users: state.users.users
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getProjects: () => {dispatch(getProjects())},
     getUsers: () => { dispatch(getUsers()) },
     editUser: (user) => { dispatch(editUser(user)) },
     deleteUser: (id) => { dispatch(deleteUser(id)) },

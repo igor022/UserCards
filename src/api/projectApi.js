@@ -36,14 +36,14 @@ const deleteProject = async (id) => {
   }
 }
 
-const editProject = async (user) => {
+const editProject = async (project) => {
   try {
     const { data } = await axios (
       {
         method: 'patch',
         url: 'http://localhost:8080/projects/',
         data: {
-          user,
+          project,
           jwt: localStorage.getItem('jwt'),
         }
       }

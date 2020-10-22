@@ -9,6 +9,7 @@ import { getUsers } from '../actions/userActions';
 
 import MiniUser from './MiniUser';
 import Status from './Status';
+import EditProjectForm from './EditProjectForm';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -96,10 +97,21 @@ const ProjectsTable = (props) => {
     }
 
   });
-  console.log('Users', users);
-  console.log('Projects', projects);
-  console.log('With devs', projectsWithDevs);
+  // console.log('Users', users);
+  // console.log('Projects', projects);
+  // console.log('With devs', projectsWithDevs);
 
+  const [open, setOpen] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(undefined);
+
+  const handleOpen = (id) => {
+    setProjectToEdit(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -117,11 +129,12 @@ const ProjectsTable = (props) => {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length - page * rowsPerPage);
 
   return (
-
+    
     projectsWithDevs
-      ? (
-        <div className={classes.root} >
+    ? (
+      <div className={classes.root} >
           <Paper className={classes.paper}>
+            
             <TableContainer >
               <Table
                 className={classes.table}
@@ -142,10 +155,10 @@ const ProjectsTable = (props) => {
                   {projectsWithDevs
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((project) => {
-                      return (
+                      return (         
                         <TableRow
-                          key={project.name}
-                          className={classes.tableRow}
+                        key={project._id}
+                        className={classes.tableRow}
                         >
                           <TableCell className={classes.rowName} component="th" id={project._id} scope="project" padding="none">
                             <Link className={classes.navLink} to={`/projects/${project._id}`}>
@@ -159,23 +172,24 @@ const ProjectsTable = (props) => {
                               {
                                 project.devs.slice(0, 5).map((dev) => (
                                   <MiniUser key={dev._id} id={dev._id} name={dev.name} />
-                                ))
-                              }
+                                  ))
+                                }
                               {
                                 project.devs.length > 5
-                                  ? <b>{`+ ${project.devs.length - 5} more`}</b>
+                                ? <b>{`+ ${project.devs.length - 5} more`}</b>
                                   : ''
-                              }
+                                }
                             </Box>
                           </TableCell>
                           <TableCell align="right">
-                            <IconButton className={classes.action} >
+                            <IconButton className={classes.action} onClick={() => handleOpen(project._id)}>            
                               <EditIcon />
                             </IconButton>
                             <IconButton className={classes.action} onClick={() => props.deleteProject(project._id)}>
                               <DeleteIcon />
                             </IconButton>
                           </TableCell>
+                          <EditProjectForm handleClose={handleClose} open={open && projectToEdit === project._id} project={project} />
                         </TableRow>
                       );
                     })}

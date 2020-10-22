@@ -39,6 +39,7 @@ export const getProjects = () => async (dispatch) => {
 export const editProject = (project) => async(dispatch) => {
   try {
     const editedProject = await api.editProject(project);
+    console.log('ed', editedProject);
     dispatch({
       type: EDIT_PROJECT,
       payload: {

@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: '100%'
+  },
+  statusSelect: {
+    marginTop: theme.spacing(2),
   }
 }));
 
@@ -40,16 +43,20 @@ const MenuProps = {
   },
 };
 
+const statuses = [
+  'None', 'Active', 'Pending', 'Done', 'Closed'
+]
 
 const AddProjectForm = (props) => {
   const classes = useStyles();
-
+  
   const [open, setOpen] = useState(false);
+  const [devNames, setDevNames] = useState([]);
+  const [status, setStatus] = useState('None');
 
   const { project } = props;
   const [formFields, setFormFields] = useState({
     name: '',
-    status: '',
     price: '',
     description: ''
   });
@@ -70,17 +77,19 @@ const AddProjectForm = (props) => {
     });
   }
 
-  const changeDevs = (event) => {
-    console.log(personName)
-    setPersonName(event.target.value);
+  const changeStatus = (e) => {
+    setStatus(e.target.value);
+  }
+
+  const changeDevs = (e) => {
+    setDevNames(e.target.value);
   };
 
-  const [personName, setPersonName] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const devs = personName.map((person) => person._id);
-    props.addProject({ ...formFields, devs });
+    const devs = devNames.map((person) => person._id);
+    props.addProject({ ...formFields, devs, status });
     handleClose();
   }
 
@@ -113,16 +122,19 @@ const AddProjectForm = (props) => {
               required
               onChange={handleChange}
             />
-            <TextField
-              margin="dense"
+            <InputLabel className={classes.statusSelect} id="statusLabel">Status</InputLabel>
+            <Select
+              
               id="status"
-              label="Status"
-              type="text"
-              value={formFields.email}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
+              value={status}
+              onChange={changeStatus}
+            >
+              {
+                statuses.map((status) => (
+                  <MenuItem value={status}>{status}</MenuItem>
+                ))
+              }
+            </Select>
             <TextField
               id="price"
               margin="dense"
@@ -141,7 +153,7 @@ const AddProjectForm = (props) => {
                 labelId="devs"
                 id="devs"
                 multiple
-                value={personName}
+                value={devNames}
                 onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
