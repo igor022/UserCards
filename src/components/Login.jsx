@@ -1,12 +1,16 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {  
@@ -27,13 +31,21 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   submit: {
-    margin: theme.spacing(4, 0, 0, 0),
+    margin: theme.spacing(1, 0, 0, 0),
     
   },
   paper: {
     padding: theme.spacing(4),
   }
 }));
+
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email format'),
+  password: Yup.string()
+    .min(4, 'Should be at least 4 characters long')
+});
 
 const Login = (props) => {
   const classes = useStyles();
@@ -43,17 +55,8 @@ const Login = (props) => {
     password: '',
   });
 
-  const handleChange = (e) => {
-    setFormFields({
-      ...formFields,
-      [e.target.id]: e.target.value,
-    });
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { email, password } = formFields;
+  const handleSubmit = async (values) => {
+    const { email, password } = values;
     try {
       const { data } = await axios.post(
         'http://localhost:8080/auth/login/',
@@ -75,6 +78,8 @@ const Login = (props) => {
     }
   }
 
+  const error = { color: 'red', fontSize: '0.75em' };
+
   return (
     <Box className={classes.root}>
       <Container className={classes.container} maxWidth="xs">
@@ -82,14 +87,34 @@ const Login = (props) => {
           <Typography variant="h4" gutterBottom>
             Log in
           </Typography>
-          <form onSubmit={handleSubmit} className={classes.form} autoComplete="off">
-            <TextField onChange={handleChange} type="email" id="email" label="Email" fullWidth/>
-            <TextField onChange={handleChange} type="password" id="password" label="Password" fullWidth/>
-            <Button type="submit" className={classes.submit} variant="contained" color="primary">
-              Log in
-            </Button>
-          </form>
-          </Paper>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            validationSchema={LoginSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ errors, touched }) => (
+              <Form>
+                <div>email</div>
+                <Field name="email" type="email"/>
+                {errors.email && touched.email ? (
+                  <div style={error}>{errors.email}</div>
+                ) : null}
+                <div>password</div>
+                <Field name="password" type="password"/>
+                {errors.password && touched.password ? (
+                  <div style={error}>{errors.password}</div>
+                ) : null}
+                <div></div>
+                <Button type="submit" className={classes.submit} variant="contained" color="primary">
+                  Log in
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Paper>
       </Container>
     </Box>
   );
