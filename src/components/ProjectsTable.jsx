@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import { getProjects, deleteProject } from '../actions/projectActions';
 import { getUsers } from '../actions/userActions';
 
-import MiniUser from './MiniUser';
-import Status from './Status';
-import EditProjectForm from './EditProjectForm';
+import ProjectTableRow from './ProjectTableRow';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -19,18 +13,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Box from '@material-ui/core/Box';
-import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
 
+
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,18 +87,6 @@ const ProjectsTable = (props) => {
   // console.log('Projects', projects);
   // console.log('With devs', projectsWithDevs);
 
-  const [open, setOpen] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState(undefined);
-
-  const handleOpen = (id) => {
-    setProjectToEdit(id);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -133,8 +107,7 @@ const ProjectsTable = (props) => {
     projectsWithDevs
     ? (
       <div className={classes.root} >
-          <Paper className={classes.paper}>
-            
+          <Paper className={classes.paper}>        
             <TableContainer >
               <Table
                 className={classes.table}
@@ -156,47 +129,9 @@ const ProjectsTable = (props) => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((project) => {
                       return (         
-                        <TableRow
-                        key={project._id}
-                        className={classes.tableRow}
-                        >
-                          <TableCell className={classes.rowName} component="th" id={project._id} scope="project" padding="none">
-                            <Link className={classes.navLink} to={`/projects/${project._id}`}>
-                              {project.name}
-                            </Link>
-                          </TableCell>
-                          <TableCell align="left"><Status name={project.status} /></TableCell>
-                          <TableCell className={classes.price} align="left"><b>${project.price}</b></TableCell>
-                          <TableCell align="left">
-                            <Box className={classes.devs}>
-                              {
-                                project.devs.slice(0, 5).map((dev) => (
-                                  <MiniUser key={dev._id} id={dev._id} name={dev.name} imageUrl={dev.imageUrl}/>
-                                  ))
-                                }
-                              {
-                                project.devs.length > 5
-                                ? <b>{`+ ${project.devs.length - 5} more`}</b>
-                                  : ''
-                                }
-                            </Box>
-                          </TableCell>
-                          <TableCell align="right">
-                            <IconButton className={classes.action} onClick={() => handleOpen(project._id)}>            
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton className={classes.action} onClick={() => props.deleteProject(project._id)}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
-                          <EditProjectForm handleClose={handleClose} open={open && projectToEdit === project._id} project={project} />
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
+                        <ProjectTableRow project={project} />
+                      )
+                    }
                   )}
                 </TableBody>
               </Table>
@@ -211,11 +146,9 @@ const ProjectsTable = (props) => {
               onChangeRowsPerPage={handleChangeRowsPerPage}
             />
           </Paper>
-
         </div >
       )
       : ''
-
   );
 }
 

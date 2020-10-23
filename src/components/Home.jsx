@@ -34,6 +34,29 @@ const Home = (props) => {
     projects.sort((a, b) => (b.price - a.price));
   }
 
+  let devsWithProjects;
+  if (projects && users) {
+    devsWithProjects = users.map((u) => {
+      const devProjects = projects.filter((p) => {
+        return p.devs.find((dev) => dev === u._id);
+      })
+      return {
+        ...u,
+        devProjects
+      };
+    })
+  }
+  
+  devsWithProjects.sort((a, b) => {
+    const priceA = a.devProjects.reduce((prev, cur) => (prev + parseInt(cur.price)), 0);
+    const priceB = b.devProjects.reduce((prev, cur) => (prev + parseInt(cur.price)), 0);
+    return priceB - priceA;
+  })
+
+  const sums = devsWithProjects.map((dev) => {
+    return dev.devProjects.reduce((prev, cur) => prev + parseInt(cur.price), 0);
+  })
+  console.log('wprojects', sums);
 
   useEffect(() => {
     props.getProjects();
@@ -48,8 +71,8 @@ const Home = (props) => {
           Top developers
         </Typography>
         { 
-          users 
-          ? <UserCards users={users} cardsAmount={3}/>
+          devsWithProjects 
+          ? <UserCards users={devsWithProjects} cardsAmount={3}/>
           : ''
         }
         
