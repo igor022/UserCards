@@ -108,7 +108,7 @@ const ProjectCard = (props) => {
                         <ClickAwayListener onClickAway={handleClose}>
                           <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                             <MenuItem onClick={handleClose}>
-                              <Link className={classes.link} to={`/users/${project._id}`}>Project</Link>
+                              <Link className={classes.link} to={`/projects/${project._id}`}>Project</Link>
                             </MenuItem>
                             <MenuItem onClick={() => props.deleteProject(project._id)}>Delete</MenuItem>
                           </MenuList>

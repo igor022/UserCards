@@ -53,10 +53,10 @@ const Home = (props) => {
     return priceB - priceA;
   })
 
-  const sums = devsWithProjects.map((dev) => {
-    return dev.devProjects.reduce((prev, cur) => prev + parseInt(cur.price), 0);
-  })
-  console.log('wprojects', sums);
+  // const sums = devsWithProjects.map((dev) => {
+  //   return dev.devProjects.reduce((prev, cur) => prev + parseInt(cur.price), 0);
+  // })
+  //console.log('wprojects', sums);
 
   useEffect(() => {
     props.getProjects();

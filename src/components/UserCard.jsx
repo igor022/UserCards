@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { deleteUser } from '../actions/userActions';
+import { getProjects } from '../actions/projectActions';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,11 +50,18 @@ const useStyles = makeStyles((theme) => ({
 
 const CardItem = (props) => {
   const classes = useStyles();
-  const { user } = props;
+  const { user, projects } = props;
   
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
+  let devProjects;
+  if (projects) {
+    devProjects = projects.filter((project) => {
+      return project.devs.find((dev) => dev === user._id);
+    })
+  }
+  console.log('pr', devProjects);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -74,6 +82,10 @@ const CardItem = (props) => {
   };
 
   const prevOpen = useRef(open);
+
+  useEffect(() => {
+    props.getProjects();
+  }, [])
 
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -142,10 +154,17 @@ const CardItem = (props) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    projects: state.projects.projects,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
+    getProjects: () => {dispatch(getProjects())},
     deleteUser: (id) => { dispatch(deleteUser(id))}
   }
 }
 
-export default connect(null, mapDispatchToProps)(CardItem);
+export default connect(mapStateToProps, mapDispatchToProps)(CardItem);
