@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Cards from './Cards';
+import Cards from './UserCards';
 import AddUserForm from './AddUserForm';
 import { getUsers } from '../actions/userActions';
 import Container from '@material-ui/core/Container';

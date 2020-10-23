@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProjectCard = (props) => {
   const classes = useStyles();
-  const project = props.project;
+  const { project } = props;
   
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -121,7 +121,7 @@ const ProjectCard = (props) => {
             )
           }
           title={project.name}
-          subheader={project.price}
+          subheader={`$${project.price}`}
         />
         <CardContent className={classes.cardContent}>
           <Typography>

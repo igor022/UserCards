@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CardItem = (props) => {
   const classes = useStyles();
-  const user = props.user;
+  const { user } = props;
   
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
