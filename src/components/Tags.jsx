@@ -79,10 +79,10 @@ const Tags = (props) => {
             <DialogActions>
               <Button onClick={handleClose} color="primary">
                 Cancel
-            </Button>
+              </Button>
               <Button onClick={handleSubmit} color="primary">
                 Add
-            </Button>
+              </Button>
             </DialogActions>
           </form>
         </Dialog>

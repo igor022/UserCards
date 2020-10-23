@@ -148,7 +148,7 @@ const Project = (props) => {
                 <div className={classes.aboutMe}>
                   <Typography variant="h4" color="textPrimary" gutterBottom>
                     About project
-                </Typography>
+                  </Typography>
                   <Typography className={classes.aboutText} variant="body1" color="textPrimary" gutterBottom>
                     {project.description}
                   </Typography>

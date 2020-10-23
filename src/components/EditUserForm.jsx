@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
+import S3 from 'react-aws-s3';
 
 import { editUser } from '../actions/userActions';
 
@@ -9,6 +10,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import EditIcon from '@material-ui/icons/Edit';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EditUserForm = (props) => {
+  const fileInput = useRef();
+
   const [open, setOpen] = useState(false);
 
   const { user } = props;
@@ -40,6 +45,7 @@ const EditUserForm = (props) => {
   };
 
   const handleChange = (e) => {
+    console.log(formFields);
     setFormFields({
       ...formFields,
       [e.target.id]: e.target.value,
@@ -48,8 +54,39 @@ const EditUserForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.editUser({ ...user, ...formFields });
+    const imageUrl = getImageUrl();
+  
+    if (imageUrl) {
+      props.editUser({ ...user, ...formFields, imageUrl });
+    } else {
+      props.editUser({ ...user, ...formFields });
+    }
     handleClose();
+  }
+
+  const getImageUrl = () => {
+    if (fileInput.current.files.length > 0) {
+      const file = fileInput.current.files[0];
+      const newFileName = file.name.slice(0, file.name.lastIndexOf('.'));
+      console.log('newFileName',newFileName);
+  
+      const config = {
+        bucketName: process.env.REACT_APP_BUCKET_NAME,
+        region: process.env.REACT_APP_REGION,
+        accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
+        secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
+      }
+      
+      const ReactS3Client = new S3(config);
+      
+      ReactS3Client.uploadFile(file, newFileName).then(data => {
+        if (data.status === 204) {
+          return `https://cards-images.s3-eu-central-1.amazonaws.com/${data.key}`;
+        } else {
+          console.log("fail");
+        }
+      });     
+    }
   }
 
 
@@ -66,6 +103,8 @@ const EditUserForm = (props) => {
           autoComplete="off"
         >
           <DialogContent>
+            <InputLabel id="imageLabel">Update image</InputLabel>
+            <input id="imageUrl" type="file" ref={fileInput} />
             <TextField
               autoFocus
               margin="dense"

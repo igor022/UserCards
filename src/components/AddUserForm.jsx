@@ -24,7 +24,8 @@ const AddUserForm = (props) => {
   const [formFields, setFormFields] = useState({
     name: '',
     email: '',
-    description: ''
+    description: '',
+    imageUrl: ''
   });
 
   const handleChange = (e) => {

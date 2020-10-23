@@ -17,6 +17,7 @@ import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 import EditUserForm from './EditUserForm';
 import Tags from './Tags.jsx';
+
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,11 +71,9 @@ const User = (props) => {
   const classes = useStyles();
   
   const {users, projects} = props;
-
   const userId = props.match.params.id;
-
+  
   let user;
-
   if (users && users.length) {
     user = users.find((user) => user._id === userId);
     if (!user) {
@@ -90,7 +89,6 @@ const User = (props) => {
       }
     })
     .filter((item) => item !== undefined);
-    console.log('devProjects', devProjects);
   }
 
   useEffect(() => {
@@ -128,12 +126,11 @@ const User = (props) => {
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image={`https://robohash.org/${user._id}`}
+                    image={`https://cards-images.s3-eu-central-1.amazonaws.com/${user.imageUrl}.jpeg`}
                     title="Image title"
                   >
                     
                   </CardMedia>
-                  
                 </Card>
               </Grid>
               <Grid item xs={8}>
