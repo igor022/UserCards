@@ -171,7 +171,7 @@ const ProjectsTable = (props) => {
                             <Box className={classes.devs}>
                               {
                                 project.devs.slice(0, 5).map((dev) => (
-                                  <MiniUser key={dev._id} id={dev._id} name={dev.name} />
+                                  <MiniUser key={dev._id} id={dev._id} name={dev.name} imageUrl={dev.imageUrl}/>
                                   ))
                                 }
                               {

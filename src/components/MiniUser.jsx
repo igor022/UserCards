@@ -28,7 +28,7 @@ const MiniUser = (props) => {
   return (
     <div className={classes.root}>
       <Link alt={props.name} className={classes.navLink} to={`/users/${props.id}`}>
-        <Avatar className={classes.icon} src={`https://robohash.org/${props.id}`}>
+        <Avatar className={classes.icon} src={props.imageUrl && props.imageUrl.length > 0 ? props.imageUrl : `https://robohash.org/${props.id}`}>
           {props.name.split(' ').map((name) => name[0]).slice(0, 2)}
         </Avatar>
       </Link>

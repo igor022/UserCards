@@ -140,7 +140,7 @@ const Project = (props) => {
                 </Typography>
                 <Box className={classes.devs}>
                   {developers.map((dev) => (
-                    <MiniUser key={dev._id} id={dev._id} name={dev.name} />
+                    <MiniUser key={dev._id} id={dev._id} name={dev.name} imageUrl={dev.imageUrl}/>
                   ))}
                 </Box>
 

@@ -36,7 +36,6 @@ const Cards = (props) => {
                 <CardItem 
                   key={user._id} 
                   user={user} 
-                  handleDelete={props.handleDelete}
                 >
                 </CardItem>
               )
