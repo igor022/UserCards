@@ -126,7 +126,7 @@ const User = (props) => {
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image={`https://cards-images.s3-eu-central-1.amazonaws.com/${user.imageUrl}.jpeg`}
+                    image={user.imageUrl && user.imageUrl.length > 0 ? user.imageUrl : `https://robohash.org/${user._id}`}
                     title="Image title"
                   >
                     

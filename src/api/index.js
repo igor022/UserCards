@@ -3,5 +3,5 @@ import projectApi from './projectApi';
 
 export default {
   ...userApi,
-  ...projectApi
+  ...projectApi,
 }

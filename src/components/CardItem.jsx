@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   cardMedia: {
-    paddingTop: '75%', // 16:9
+    paddingTop: '75%',
   },
   cardContent: {
     flexGrow: 1,
@@ -125,7 +125,7 @@ const CardItem = (props) => {
         />
         <CardMedia
           className={classes.cardMedia}
-          image={`https://robohash.org/${user._id}`}
+          image={user.imageUrl && user.imageUrl.length > 0 ? user.imageUrl : `https://robohash.org/${user._id}`}
           title="Image title"
         />
         <CardContent className={classes.cardContent}>

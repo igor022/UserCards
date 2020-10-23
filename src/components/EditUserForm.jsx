@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import S3 from 'react-aws-s3';
+
 
 import { editUser } from '../actions/userActions';
+
+import { uploadFile } from '../api/s3';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -45,49 +47,30 @@ const EditUserForm = (props) => {
   };
 
   const handleChange = (e) => {
-    console.log(formFields);
     setFormFields({
       ...formFields,
       [e.target.id]: e.target.value,
     });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageUrl = getImageUrl();
-  
-    if (imageUrl) {
-      props.editUser({ ...user, ...formFields, imageUrl });
-    } else {
-      props.editUser({ ...user, ...formFields });
+    
+    let file;
+    if (fileInput.current.files.length > 0) {
+      file = fileInput.current.files[0];
+      const imageUrl = await uploadFile(file);
+      console.log('uploaded file', imageUrl);
+      
+      if (imageUrl) {
+        props.editUser({ ...user, ...formFields, imageUrl });
+      } else {
+        props.editUser({ ...user, ...formFields });
+      }
     }
     handleClose();
   }
 
-  const getImageUrl = () => {
-    if (fileInput.current.files.length > 0) {
-      const file = fileInput.current.files[0];
-      const newFileName = file.name.slice(0, file.name.lastIndexOf('.'));
-      console.log('newFileName',newFileName);
-  
-      const config = {
-        bucketName: process.env.REACT_APP_BUCKET_NAME,
-        region: process.env.REACT_APP_REGION,
-        accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
-        secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
-      }
-      
-      const ReactS3Client = new S3(config);
-      
-      ReactS3Client.uploadFile(file, newFileName).then(data => {
-        if (data.status === 204) {
-          return `https://cards-images.s3-eu-central-1.amazonaws.com/${data.key}`;
-        } else {
-          console.log("fail");
-        }
-      });     
-    }
-  }
 
 
   return (
