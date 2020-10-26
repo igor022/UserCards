@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+const api = process.env.REACT_APP_API;
+
 const addProject = async (project) => {
   try {
     const { data } = await axios.post(
-      'http://localhost:8080/projects', 
+      `${api}/projects`, 
       { 
         project,
         jwt: localStorage.getItem('jwt'),
@@ -23,7 +25,7 @@ const deleteProject = async (id) => {
     const { data } = await axios (
       {
         method: 'delete',
-        url: 'http://localhost:8080/projects/',
+        url: `${api}/projects/`,
         data: {
           id,
           jwt: localStorage.getItem('jwt'),
@@ -41,7 +43,7 @@ const editProject = async (project) => {
     const { data } = await axios (
       {
         method: 'patch',
-        url: 'http://localhost:8080/projects/',
+        url: `${api}/projects/`,
         data: {
           project,
           jwt: localStorage.getItem('jwt'),
@@ -56,7 +58,7 @@ const editProject = async (project) => {
 
 const getProjects = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8080/projects/');
+    const { data } = await axios.get(`${api}/projects/`);
     return data; 
   } catch(err) {
     throw(err);

@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+const api = process.env.REACT_APP_API;
+
 const addUser = async (user) => {
   try {
     const { data } = await axios.post(
-      'http://localhost:8080/users', 
+      `${api}/users`, 
       { 
         user,
         jwt: localStorage.getItem('jwt'),
@@ -22,7 +24,7 @@ const deleteUser = async (id) => {
     const { data } = await axios (
       {
         method: 'delete',
-        url: 'http://localhost:8080/users/',
+        url: `${api}/users/`,
         data: {
           id,
           jwt: localStorage.getItem('jwt'),
@@ -40,7 +42,7 @@ const editUser = async (user) => {
     const { data } = await axios (
       {
         method: 'patch',
-        url: 'http://localhost:8080/users/',
+        url: `${api}/users/`,
         data: {
           user,
           jwt: localStorage.getItem('jwt'),
@@ -55,7 +57,7 @@ const editUser = async (user) => {
 
 const getUsers = async () => {
   try {
-    const { data } = await axios.get('http://localhost:8080/users/');
+    const { data } = await axios.get(`${api}/users/`);
     return data; 
   } catch(err) {
     throw(err);
