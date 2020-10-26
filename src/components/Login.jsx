@@ -59,7 +59,7 @@ const Login = (props) => {
     const { email, password } = values;
     try {
       const { data } = await axios.post(
-        'http://localhost:8080/auth/login/',
+        `${process.env.REACT_APP_API}/auth/login/`,
         {
           email,
           password

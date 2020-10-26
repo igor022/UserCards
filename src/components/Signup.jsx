@@ -71,7 +71,7 @@ const Signup = (props) => {
 
     if (password === repeatPassword) {
       const { data } = await axios.post(
-        'http://localhost:8080/auth/signup/',
+        `${process.env.REACT_APP_API}/auth/signup/`,
         {
           name,
           email,
