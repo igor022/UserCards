@@ -35,7 +35,8 @@ const AddUserForm = (props) => {
     });
   }
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     props.addUser(formFields);
     handleClose();
@@ -50,8 +51,6 @@ const AddUserForm = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  
 
   return (
     <div>
@@ -100,7 +99,7 @@ const AddUserForm = (props) => {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} color="primary">
+              <Button type="submit" color="primary">
                 Add
               </Button>
             </DialogActions>

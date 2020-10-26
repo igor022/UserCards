@@ -80,7 +80,6 @@ const EditProjectForm = (props) => {
     props.editProject({ ...project, ...formFields, devs, status });
     props.handleClose();
   }
-  console.log(props.open);
 
   useEffect(() => {
     props.getUsers();
@@ -146,7 +145,6 @@ const EditProjectForm = (props) => {
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
-                    {console.log('Selected', selected)}
                     {selected.map((user) => (
                       <Chip key={user._id} label={user.name} className={classes.chip} />
                     ))}

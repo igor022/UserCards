@@ -60,13 +60,14 @@ const EditUserForm = (props) => {
     if (fileInput.current.files.length > 0) {
       file = fileInput.current.files[0];
       const imageUrl = await uploadFile(file);
-      console.log('uploaded file', imageUrl);
       
       if (imageUrl) {
         props.editUser({ ...user, ...formFields, imageUrl });
-      } else {
+      }  else {
         props.editUser({ ...user, ...formFields });
       }
+    } else {
+      props.editUser({ ...user, ...formFields });
     }
     handleClose();
   }

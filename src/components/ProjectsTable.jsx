@@ -83,9 +83,6 @@ const ProjectsTable = (props) => {
     }
 
   });
-  // console.log('Users', users);
-  // console.log('Projects', projects);
-  // console.log('With devs', projectsWithDevs);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

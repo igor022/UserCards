@@ -61,7 +61,7 @@ const CardItem = (props) => {
       return project.devs.find((dev) => dev === user._id);
     })
   }
-  console.log('pr', devProjects);
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };

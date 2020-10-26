@@ -66,7 +66,6 @@ const Login = (props) => {
         }
       );
 
-      console.log(data);
       if (data._id) {
         localStorage.setItem('id', data._id);
         localStorage.setItem('jwt', data.token);
