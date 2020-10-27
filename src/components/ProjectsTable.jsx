@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { getProjects, deleteProject } from '../actions/projectActions';
+import { getProjects } from '../actions/projectActions';
 import { getUsers } from '../actions/userActions';
 
 import ProjectTableRow from './ProjectTableRow';
@@ -165,7 +165,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getUsers: () => { dispatch(getUsers()) },
     getProjects: () => { dispatch(getProjects()) },
-    deleteProject: (id) => { dispatch(deleteProject(id)) }
   }
 }
 

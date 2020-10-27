@@ -154,6 +154,7 @@ const AddProjectForm = (props) => {
               margin="dense"
               label="Price"
               type="text"
+              required
               multiline
               rowsMax={4}
               fullWidth

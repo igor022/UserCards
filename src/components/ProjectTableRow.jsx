@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import MiniUser from './MiniUser';
 import Status from './Status';
 import EditProjectForm from './EditProjectForm';
+
+import { deleteProject } from '../actions/projectActions';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -91,4 +94,10 @@ const ProjectTableRow = (props) => {
   );
 }
 
-export default ProjectTableRow;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteProject: (id) => { dispatch(deleteProject(id)) }
+  }
+}
+export default connect(undefined, mapDispatchToProps)(ProjectTableRow);
