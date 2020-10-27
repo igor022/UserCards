@@ -47,7 +47,7 @@ const statuses = [
 const EditProjectForm = (props) => {
   const classes = useStyles();
 
-  const { project } = props;
+  const { project, users } = props;
 
   const [status, setStatus] = useState(project.status)
 
@@ -81,9 +81,6 @@ const EditProjectForm = (props) => {
     props.handleClose();
   }
 
-  useEffect(() => {
-    props.getUsers();
-  }, []);
 
   return (
     <div>
@@ -186,18 +183,10 @@ const EditProjectForm = (props) => {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.users.users,
-  }
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUsers: () => { dispatch(getUsers()) },
     editProject: (project) => { dispatch(editProject(project)) }
   }
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditProjectForm));
+export default connect(undefined, mapDispatchToProps)(withRouter(EditProjectForm));

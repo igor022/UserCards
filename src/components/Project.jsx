@@ -154,7 +154,7 @@ const Project = (props) => {
                 <Button className={classes.editButton} variant="contained" color="primary" onClick={() => changeOpen(true)}>
                   Edit project
                 </Button>
-                <EditProjectForm handleClose={handleClose} open={open} project={{...project, devs: developers}} />
+                <EditProjectForm handleClose={handleClose} open={open} project={{...project, devs: developers}} users={users}/>
                 <Button className={classes.deleteButton} onClick={() => handleDelete(project._id)} variant="contained" color="secondary">
                   Delete project
                 </Button>

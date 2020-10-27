@@ -73,16 +73,18 @@ const ProjectsTable = (props) => {
   const { projects, users } = props;
 
 
-  const projectsWithDevs = projects.map((project) => {
-    const developers = project.devs.map((dev) => users.find((u) => u._id === dev))
-      .filter((item) => item !== undefined);
-
-    return {
-      ...project,
-      devs: developers
-    }
-
-  });
+  let projectsWithDevs;
+  if (projects && users) {
+    projectsWithDevs= projects.map((project) => {
+      const developers = project.devs.map((dev) => users.find((u) => u._id === dev))
+        .filter((item) => item !== undefined);
+  
+      return {
+        ...project,
+        devs: developers
+      } 
+    });
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -94,10 +96,11 @@ const ProjectsTable = (props) => {
   };
 
   useEffect(() => {
+    props.getUsers();
     props.getProjects();
   }, [])
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length - page * rowsPerPage);
+  //const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length - page * rowsPerPage);
 
   return (
     
@@ -126,7 +129,7 @@ const ProjectsTable = (props) => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((project) => {
                       return (         
-                        <ProjectTableRow project={project} key={project._id}/>
+                        <ProjectTableRow project={project} key={project._id} users={users}/>
                       )
                     }
                   )}
@@ -145,7 +148,7 @@ const ProjectsTable = (props) => {
           </Paper>
         </div >
       )
-      : ''
+      : 'Loading...'
   );
 }
 

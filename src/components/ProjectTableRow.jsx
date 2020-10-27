@@ -86,7 +86,7 @@ const ProjectTableRow = (props) => {
             <DeleteIcon />
           </IconButton>
         </TableCell>
-        <EditProjectForm handleClose={handleClose} open={open && projectToEdit === project._id} project={project} />
+        <EditProjectForm handleClose={handleClose} open={open && projectToEdit === project._id} project={project} users={props.users}/>
       </TableRow>
   );
 }
