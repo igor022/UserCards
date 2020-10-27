@@ -94,8 +94,14 @@ const AddProjectForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const devs = devNames.map((person) => person._id);
-    props.addProject({ ...formFields, devs, status });
+    const id = localStorage.getItem('id');
+    if (id) {
+      const devs = devNames.map((person) => person._id);
+      props.addProject({ ...formFields, devs, status, stuffId: id });
+    } else {
+      props.history.push('/auth/signup');
+      return;
+    }
     handleClose();
   }
 

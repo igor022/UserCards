@@ -13,7 +13,7 @@ const PrivateRoute = (props) => {
           exact={props.exact} 
           component={props.component} 
         />
-      : <Redirect to="/auth/login" />
+      : <Redirect to="/auth/signup" />
     }
     </>
   )

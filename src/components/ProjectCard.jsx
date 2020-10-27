@@ -86,7 +86,7 @@ const ProjectCard = (props) => {
       <Card className={classes.card}>
         <CardHeader
           action={
-            localStorage.getItem('jwt') && (      
+            (localStorage.getItem('jwt') && localStorage.getItem('id') === project.stuffId) && (      
               <div>
                 <IconButton 
                   aria-label="settings"

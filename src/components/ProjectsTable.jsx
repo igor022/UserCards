@@ -72,10 +72,12 @@ const ProjectsTable = (props) => {
 
   const { projects, users } = props;
 
-
+  const id = localStorage.getItem('id');
   let projectsWithDevs;
-  if (projects && users) {
-    projectsWithDevs= projects.map((project) => {
+  if (projects && users && id) {
+    projectsWithDevs = projects
+      .filter((p) => p.stuffId === id)
+      .map((project) => {
       const developers = project.devs.map((dev) => users.find((u) => u._id === dev))
         .filter((item) => item !== undefined);
   
@@ -139,7 +141,7 @@ const ProjectsTable = (props) => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={projects.length}
+              count={projectsWithDevs.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
