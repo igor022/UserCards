@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { uploadFile } from '../api/s3';
 import { addUser } from '../actions/userActions';
 
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddUserForm = (props) => {
+  const fileInput = useRef();
+
   const [open, setOpen] = useState(false);
 
   const [formFields, setFormFields] = useState({
@@ -38,7 +42,20 @@ const AddUserForm = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    props.addUser(formFields);
+    
+    let file;
+    if (fileInput.current.files.length > 0) {
+      file = fileInput.current.files[0];
+      const imageUrl = await uploadFile(file);
+      
+      if (imageUrl) {
+        props.addUser({ ...formFields, imageUrl });
+      }  else {
+        props.addUser(formFields);
+      }
+    } else {
+      props.addUser(formFields);
+    }
     handleClose();
   }
 
@@ -65,6 +82,8 @@ const AddUserForm = (props) => {
             autoComplete="off"
           > 
             <DialogContent>    
+                <InputLabel id="imageLabel">Add image</InputLabel>
+                <input id="imageUrl" type="file" ref={fileInput} />
                 <TextField
                   autoFocus
                   margin="dense"

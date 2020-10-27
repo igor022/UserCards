@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 
-
 import { editUser } from '../actions/userActions';
 
 import { uploadFile } from '../api/s3';
