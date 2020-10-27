@@ -64,8 +64,7 @@ const AddUserForm = (props) => {
             className={classes.addForm} 
             autoComplete="off"
           > 
-            <DialogContent>
-                
+            <DialogContent>    
                 <TextField
                   autoFocus
                   margin="dense"

@@ -1,5 +1,5 @@
 import { GET_USERS_LOADING, GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from './actionTypes';
-import api from '../api';
+import api from '../api/userApi';
 
 export const addUser = (user) => async (dispatch) => {
   try {

@@ -173,7 +173,7 @@ const EditProjectForm = (props) => {
             <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color="primary">
+            <Button type="submit" color="primary">
               Edit
             </Button>
           </DialogActions>

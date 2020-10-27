@@ -36,7 +36,10 @@ const useStyles = makeStyles((theme) => ({
   form: {
     display: 'flex',
     flexDirection: 'column',
-  }
+  },
+  formControl: {
+    width: '100%'
+  },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -54,22 +57,17 @@ const statuses = [
   'None', 'Active', 'Pending', 'Done', 'Closed'
 ]
 
-const AddProjectSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(1, 'Too short!')
-    .required('Required'),
-  price: Yup.string()
-    .required('Required'),
-  description: Yup.string()
-    
-});
-
 const AddProjectForm = (props) => {
   const classes = useStyles();
   
   const [open, setOpen] = useState(false);
   const [devNames, setDevNames] = useState([]);
   const [status, setStatus] = useState('None');
+  const [formFields, setFormFields] = useState({
+    name: '',
+    price: '',
+    description: '',
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,10 +85,17 @@ const AddProjectForm = (props) => {
     setDevNames(e.target.value);
   };
 
+  const handleChange = (e) => {
+    setFormFields({
+      ...formFields,
+      [e.target.id]: e.target.value,
+    });
+  }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const devs = devNames.map((person) => person._id);
-    props.addProject({ ...values, devs, status });
+    props.addProject({ ...formFields, devs, status });
     handleClose();
   }
 
@@ -104,32 +109,29 @@ const AddProjectForm = (props) => {
       <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
         Add project
       </Button>
-      <Dialog className={classes.dialog} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add project</DialogTitle>
-        <Formik
-          initialValues={{
-            name: '',
-            price: '',
-            description: '',
-          }}
-          validationSchema={AddProjectSchema}
+        <form
           onSubmit={handleSubmit}
+          className={classes.addForm}
           autoComplete="off"
         >
-          {({ errors, touched }) => (
-            <Form className={classes.form}>
-              <InputLabel id="name-label">Name</InputLabel>
-              <Field name="name" />
-              {errors.name && touched.name ? (
-                <div>{errors.name}</div>
-              ) : null}
-              <InputLabel id="price-label">Price</InputLabel>
-              <Field name="price" />
-              {errors.price && touched.price ? (
-                <div>{errors.price}</div>
-              ) : null}
-              <InputLabel id="status-label">Status</InputLabel>
-              <Select     
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              value={formFields.name}
+              fullWidth
+              required
+              onChange={handleChange}
+            />
+            <FormControl className={classes.formControl}>
+              <InputLabel id="statusLabel">Status</InputLabel>
+              <Select 
+                labelId="statusLabel"           
                 id="status"
                 value={status}
                 onChange={changeStatus}
@@ -140,9 +142,22 @@ const AddProjectForm = (props) => {
                   ))
                 }
               </Select>
-              <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
+            </FormControl>
+            <TextField
+              id="price"
+              margin="dense"
+              label="Price"
+              type="text"
+              multiline
+              rowsMax={4}
+              fullWidth
+              value={formFields.price}
+              onChange={handleChange}
+            />
+            <FormControl className={classes.formControl}>
+              <InputLabel id="devs-label">Developers</InputLabel>
               <Select
-                labelId="devs"
+                labelId="devs-label"
                 id="devs"
                 multiple
                 value={devNames}
@@ -163,22 +178,28 @@ const AddProjectForm = (props) => {
                   </MenuItem>
                 ))}
               </Select>
-              <InputLabel id="description-label">Description</InputLabel>
-              <Field name="description" />
-              {errors.description && touched.description ? (
-                <div>{errors.description}</div>
-              ) : null}
-              <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                  Cancel
-                </Button>
-                <Button type="submit" color="primary">
-                  Add
-                </Button>
-              </DialogActions>
-            </Form>
-          )}
-        </Formik>
+            </FormControl>
+            <TextField
+              id="description"
+              margin="dense"
+              label="About"
+              type="text"
+              multiline
+              rowsMax={4}
+              fullWidth
+              value={formFields.description}
+              onChange={handleChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

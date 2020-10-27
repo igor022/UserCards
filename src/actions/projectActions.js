@@ -1,5 +1,5 @@
 import { GET_PROJECTS_LOADING, GET_PROJECTS, ADD_PROJECT, DELETE_PROJECT, EDIT_PROJECT } from './actionTypes';
-import api from '../api';
+import api from '../api/projectApi';
 
 export const addProject = (project) => async (dispatch) => {
   try {
