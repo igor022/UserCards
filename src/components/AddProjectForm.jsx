@@ -69,6 +69,9 @@ const AddProjectForm = (props) => {
     description: '',
   });
 
+  const { users } = props;
+  const stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -179,7 +182,7 @@ const AddProjectForm = (props) => {
                 )}
                 MenuProps={MenuProps}
               >
-                {props.users.map((user) => (
+                {stuffUsers.map((user) => (
                   <MenuItem key={user._id} value={user}>
                     {user.name}
                   </MenuItem>

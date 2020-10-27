@@ -74,11 +74,14 @@ const ProjectsTable = (props) => {
 
   const id = localStorage.getItem('id');
   let projectsWithDevs;
+  let stuffUsers;
   if (projects && users && id) {
+    stuffUsers = users.filter((user) => user.stuffId === id);
+
     projectsWithDevs = projects
       .filter((p) => p.stuffId === id)
       .map((project) => {
-      const developers = project.devs.map((dev) => users.find((u) => u._id === dev))
+      const developers = project.devs.map((dev) => stuffUsers.find((u) => u._id === dev))
         .filter((item) => item !== undefined);
   
       return {
@@ -131,7 +134,7 @@ const ProjectsTable = (props) => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((project) => {
                       return (         
-                        <ProjectTableRow project={project} key={project._id} users={users}/>
+                        <ProjectTableRow project={project} key={project._id} users={stuffUsers}/>
                       )
                     }
                   )}

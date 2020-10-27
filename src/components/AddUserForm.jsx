@@ -43,19 +43,28 @@ const AddUserForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    let file;
-    if (fileInput.current.files.length > 0) {
-      file = fileInput.current.files[0];
-      const imageUrl = await uploadFile(file);
+    const id = localStorage.getItem('id');
+    if (id) {
+      formFields.stuffId = id;
+      let file;
+      if (fileInput.current.files.length > 0) {
+        file = fileInput.current.files[0];
+        const imageUrl = await uploadFile(file);
+        
+        if (imageUrl) {
+          props.addUser({ ...formFields, imageUrl });
+        }  else {
+          props.addUser(formFields);
+        }
       
-      if (imageUrl) {
-        props.addUser({ ...formFields, imageUrl });
-      }  else {
+      } else {
         props.addUser(formFields);
       }
     } else {
-      props.addUser(formFields);
+      props.history.push('/auth/signup');
+      return;
     }
+
     handleClose();
   }
 

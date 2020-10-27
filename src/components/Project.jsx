@@ -73,16 +73,22 @@ const Project = (props) => {
 
   const projectId = props.match.params.id;
 
+  
+  let stuffUsers;
+  if (users) {
+    stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
+  }
+  
   let project;
   let developers;
-  if (projects && projects.length) {
+  if (projects && projects.length && stuffUsers) {
     project = projects.find((p) => p._id === projectId);
 
     if (!project) {
       props.history.push('/404');
     }
 
-    developers = project.devs.map((dev) => users.find((u) => u._id === dev))
+    developers = project.devs.map((dev) => stuffUsers.find((u) => u._id === dev))
       .filter((item) => item !== undefined);
   }
   
@@ -154,7 +160,7 @@ const Project = (props) => {
                 <Button className={classes.editButton} variant="contained" color="primary" onClick={() => changeOpen(true)}>
                   Edit project
                 </Button>
-                <EditProjectForm handleClose={handleClose} open={open} project={{...project, devs: developers}} users={users}/>
+                <EditProjectForm handleClose={handleClose} open={open} project={{...project, devs: developers}} users={stuffUsers}/>
                 <Button className={classes.deleteButton} onClick={() => handleDelete(project._id)} variant="contained" color="secondary">
                   Delete project
                 </Button>

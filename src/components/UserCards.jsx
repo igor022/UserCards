@@ -19,13 +19,18 @@ const UserCards = (props) => {
   const { users } = props;
   const classes = useStyles();
 
+  let stuffUsers;
+  if (users) {
+    stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
+  }
+
   return(
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
         {
-          users && users.length
+          stuffUsers && stuffUsers.length
           ? 
-          users
+          stuffUsers
             .slice(0, props.cardsAmount)
             .map((user, i) => (
               <UserCard 

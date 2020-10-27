@@ -83,12 +83,7 @@ const User = (props) => {
 
   let devProjects = [];
   if (projects && user) {
-    devProjects = projects.map((project) => {
-      if(project.devs.find((dev) => dev === user._id)) {
-        return project;
-      }
-    })
-    .filter((item) => item !== undefined);
+    devProjects = projects.filter((project) => project.devs.find((dev) => dev === user._id));
   }
 
   useEffect(() => {
@@ -171,11 +166,17 @@ const User = (props) => {
                 {user.description}
               </Typography>
             </div>
-
-            <EditUserForm user={user}/>
-            <Button className={classes.deleteButton} onClick={() => handleDelete(user._id)} variant="contained" color="secondary">
-              Delete user
-            </Button>
+            {
+              user.stuffId === localStorage.getItem('id')
+              ? (
+                <>
+                  <EditUserForm user={user}/>
+                  <Button className={classes.deleteButton} onClick={() => handleDelete(user._id)} variant="contained" color="secondary">
+                    Delete user
+                  </Button>
+                </>
+              ) : null
+            }
           </Paper>
         </Container> 
         
