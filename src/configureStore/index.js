@@ -8,14 +8,18 @@ import monitorReducerEnhancer from '../enhancers/monitorReducer';
 
 export default function configureStore(preloadedState) {
   const middlewares = [thunkMiddleware];
-  const enhancers = [middlewareEnhancer];
-
+  
   if (process.env.NODE_ENV === 'development') {
     middlewares.push(loggerMiddleware);
+  }
+  
+  const middlewareEnhancer = applyMiddleware(...middlewares);
+  
+  const enhancers = [middlewareEnhancer];
+  if (process.env.NODE_ENV === 'development') {
     enhancers.push(monitorReducerEnhancer);
   }
-
-  const middlewareEnhancer = applyMiddleware(...middlewares);
+  
   const composedEnhancers = composeWithDevTools(...enhancers);
 
   const store = createStore(allReducer, preloadedState, composedEnhancers);

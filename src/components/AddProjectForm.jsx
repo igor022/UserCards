@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 import { addProject } from '../actions/projectActions';
 import { getUsers } from '../actions/userActions';
@@ -24,11 +26,16 @@ const useStyles = makeStyles((theme) => ({
   addButton: {
     margin: theme.spacing(2, 0, 2),
   },
-  formControl: {
-    width: '100%'
+  dialog: {
+    width: '500px',
+    padding: theme.spacing(5),
   },
   statusSelect: {
     marginTop: theme.spacing(2),
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
   }
 }));
 
@@ -47,20 +54,22 @@ const statuses = [
   'None', 'Active', 'Pending', 'Done', 'Closed'
 ]
 
+const AddProjectSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(1, 'Too short!')
+    .required('Required'),
+  price: Yup.string()
+    .required('Required'),
+  description: Yup.string()
+    
+});
+
 const AddProjectForm = (props) => {
   const classes = useStyles();
   
   const [open, setOpen] = useState(false);
   const [devNames, setDevNames] = useState([]);
   const [status, setStatus] = useState('None');
-
-  const { project } = props;
-  const [formFields, setFormFields] = useState({
-    name: '',
-    price: '',
-    description: ''
-  });
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,13 +78,6 @@ const AddProjectForm = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleChange = (e) => {
-    setFormFields({
-      ...formFields,
-      [e.target.id]: e.target.value,
-    });
-  }
 
   const changeStatus = (e) => {
     setStatus(e.target.value);
@@ -86,10 +88,9 @@ const AddProjectForm = (props) => {
   };
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (values) => {
     const devs = devNames.map((person) => person._id);
-    props.addProject({ ...formFields, devs, status });
+    props.addProject({ ...values, devs, status });
     handleClose();
   }
 
@@ -103,51 +104,42 @@ const AddProjectForm = (props) => {
       <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
         Add project
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog className={classes.dialog} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add project</DialogTitle>
-        <form
+        <Formik
+          initialValues={{
+            name: '',
+            price: '',
+            description: '',
+          }}
+          validationSchema={AddProjectSchema}
           onSubmit={handleSubmit}
-          className={classes.addForm}
           autoComplete="off"
         >
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              value={formFields.name}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
-            <InputLabel className={classes.statusSelect} id="statusLabel">Status</InputLabel>
-            <Select
-              
-              id="status"
-              value={status}
-              onChange={changeStatus}
-            >
-              {
-                statuses.map((status) => (
-                  <MenuItem value={status}>{status}</MenuItem>
-                ))
-              }
-            </Select>
-            <TextField
-              id="price"
-              margin="dense"
-              label="Price"
-              type="text"
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.price}
-              onChange={handleChange}
-            />
-
-            <FormControl className={classes.formControl}>
+          {({ errors, touched }) => (
+            <Form className={classes.form}>
+              <InputLabel id="name-label">Name</InputLabel>
+              <Field name="name" />
+              {errors.name && touched.name ? (
+                <div>{errors.name}</div>
+              ) : null}
+              <InputLabel id="price-label">Price</InputLabel>
+              <Field name="price" />
+              {errors.price && touched.price ? (
+                <div>{errors.price}</div>
+              ) : null}
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select     
+                id="status"
+                value={status}
+                onChange={changeStatus}
+              >
+                {
+                  statuses.map((status) => (
+                    <MenuItem value={status}>{status}</MenuItem>
+                  ))
+                }
+              </Select>
               <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
               <Select
                 labelId="devs"
@@ -158,7 +150,6 @@ const AddProjectForm = (props) => {
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
-                    {console.log('Selected', selected)}
                     {selected.map((user) => (
                       <Chip key={user._id} label={user.name} className={classes.chip} />
                     ))}
@@ -172,29 +163,22 @@ const AddProjectForm = (props) => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
-
-            <TextField
-              id="description"
-              margin="dense"
-              label="About"
-              type="text"
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.description}
-              onChange={handleChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit} color="primary">
-              Add
-            </Button>
-          </DialogActions>
-        </form>
+              <InputLabel id="description-label">Description</InputLabel>
+              <Field name="description" />
+              {errors.description && touched.description ? (
+                <div>{errors.description}</div>
+              ) : null}
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button type="submit" color="primary">
+                  Add
+                </Button>
+              </DialogActions>
+            </Form>
+          )}
+        </Formik>
       </Dialog>
     </div>
   );

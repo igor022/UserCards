@@ -126,7 +126,7 @@ const ProjectsTable = (props) => {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((project) => {
                       return (         
-                        <ProjectTableRow project={project} />
+                        <ProjectTableRow project={project} key={project._id}/>
                       )
                     }
                   )}

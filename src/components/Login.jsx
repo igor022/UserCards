@@ -1,9 +1,8 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -49,11 +48,6 @@ const LoginSchema = Yup.object().shape({
 
 const Login = (props) => {
   const classes = useStyles();
-
-  const [formFields, setFormFields] = useState({
-    email: '',
-    password: '',
-  });
 
   const handleSubmit = async (values) => {
     const { email, password } = values;

@@ -50,17 +50,11 @@ const useStyles = makeStyles((theme) => ({
 
 const CardItem = (props) => {
   const classes = useStyles();
-  const { user, projects } = props;
+  const { user } = props;
   
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 
-  let devProjects;
-  if (projects) {
-    devProjects = projects.filter((project) => {
-      return project.devs.find((dev) => dev === user._id);
-    })
-  }
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -82,10 +76,6 @@ const CardItem = (props) => {
   };
 
   const prevOpen = useRef(open);
-
-  useEffect(() => {
-    props.getProjects();
-  }, [])
 
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -154,17 +144,10 @@ const CardItem = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    projects: state.projects.projects,
-  }
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    getProjects: () => {dispatch(getProjects())},
     deleteUser: (id) => { dispatch(deleteUser(id))}
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardItem);
+export default connect(undefined, mapDispatchToProps)(CardItem);
