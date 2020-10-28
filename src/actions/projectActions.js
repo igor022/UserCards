@@ -3,7 +3,6 @@ import api from '../api/projectApi';
 
 export const addProject = (project) => async (dispatch) => {
   try {
-    console.log(project);
     const newProject = await api.addProject(project);
 
     dispatch({
@@ -39,7 +38,6 @@ export const getProjects = () => async (dispatch) => {
 export const editProject = (project) => async(dispatch) => {
   try {
     const editedProject = await api.editProject(project);
-    console.log('ed', editedProject);
     dispatch({
       type: EDIT_PROJECT,
       payload: {

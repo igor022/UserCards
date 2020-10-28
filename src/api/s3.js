@@ -2,7 +2,6 @@ import S3 from 'react-aws-s3';
 
 export const uploadFile = async (file) => {
   const newFileName = file.name.slice(0, file.name.lastIndexOf('.'));
-  console.log('newFileName',newFileName);
 
   const config = {
     bucketName: process.env.REACT_APP_BUCKET_NAME,
