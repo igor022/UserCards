@@ -57,15 +57,7 @@ const editUser = async (user) => {
 
 const getUsers = async () => {
   try {
-    const { data } = await axios(
-      {
-        method: 'get',
-        url: `${api}/users/`,
-        data: {
-          jwt: localStorage.getItem('jwt')
-        }
-      }
-    );
+    const { data } = await axios.get(`${api}/users/`);
     return data; 
   } catch(err) {
     throw(err);
