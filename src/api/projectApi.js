@@ -59,6 +59,7 @@ const editProject = async (project) => {
 const getProjects = async () => {
   try {
     const { data } = await axios.get(`${api}/projects/`);
+
     return data; 
   } catch(err) {
     throw(err);
