@@ -8,7 +8,7 @@ import EditProjectForm from './EditProjectForm';
 
 import { deleteProject } from '../actions/projectActions';
 
-import { Project, User } from '../types/types';
+import { Project, User, ProjectWithDevs } from '../types/types';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -29,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
   devs: {
     display: 'flex',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    listStyleType: 'none',
+    padding: 0,
+    margin: 0
   },
   action: {
 
@@ -67,18 +70,20 @@ const ProjectTableRow = (props) => {
       <TableCell align="left"><Status name={project.status} /></TableCell>
       <TableCell className={classes.price} align="left"><b>${project.price}</b></TableCell>
       <TableCell align="left">
-        <Box className={classes.devs}>
+        <ul className={classes.devs}>
           {
             project.devs.slice(0, 5).map((dev) => (
-              <MiniUser key={dev._id} id={dev._id} name={dev.name} imageUrl={dev.imageUrl}/>
-              ))
-            }
+              <li key={dev._id} >
+                <MiniUser id={dev._id} name={dev.name} imageUrl={dev.imageUrl}/>
+              </li>
+            ))
+          }
           {
             project.devs.length > 5
             ? <b>{`+ ${project.devs.length - 5} more`}</b>
             : ''
           }
-        </Box>
+        </ul>
       </TableCell>
       <TableCell align="right">
         <IconButton className={classes.action} onClick={() => handleOpen(project._id)}>            

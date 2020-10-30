@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
 
-import { getProjects } from '../actions/projectActions';
-import { getUsers } from '../actions/userActions';
+
+import { User, ProjectWithDevs } from '../types/types';
 
 import ProjectTableRow from './ProjectTableRow';
 
@@ -64,32 +63,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProjectsTable = (props) => {
+interface Props {
+  projectsWithDevs: ProjectWithDevs[],
+  stuffUsers: User[],
+
+}
+
+const ProjectsTable = (props : Props) => {
   const classes = useStyles();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { projects, users } = props;
-
-  const id = localStorage.getItem('id');
-  let projectsWithDevs;
-  let stuffUsers;
-  if (projects && users && id) {
-    stuffUsers = users.filter((user) => user.stuffId === id);
-
-    projectsWithDevs = projects
-      .filter((p) => p.stuffId === id)
-      .map((project) => {
-      const developers = project.devs.map((dev) => stuffUsers.find((u) => u._id === dev))
-        .filter((item) => item !== undefined);
-  
-      return {
-        ...project,
-        devs: developers
-      } 
-    });
-  }
+  const { projectsWithDevs, stuffUsers } = props;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,75 +86,53 @@ const ProjectsTable = (props) => {
     setPage(0);
   };
 
-  useEffect(() => {
-    props.getUsers();
-    props.getProjects();
-  }, [])
-
   //const emptyRows = rowsPerPage - Math.min(rowsPerPage, projects.length - page * rowsPerPage);
 
   return (
-    
-    projectsWithDevs
-    ? (
-      <div className={classes.root} >
-          <Paper className={classes.paper}>        
-            <TableContainer >
-              <Table
-                className={classes.table}
-                aria-labelledby="tableTitle"
-                size='medium'
-                aria-label="enhanced table"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell align="left">Status</TableCell>
-                    <TableCell align="left">Price</TableCell>
-                    <TableCell align="left">Developers</TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className={classes.tableBody}>
-                  {projectsWithDevs
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((project) => {
-                      return (         
-                        <ProjectTableRow project={project} key={project._id} users={stuffUsers}/>
-                      )
-                    }
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={projectsWithDevs.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </div >
-      )
-      : 'Loading...'
+    <div className={classes.root} >
+      <Paper className={classes.paper}>        
+        <TableContainer >
+          <Table
+            className={classes.table}
+            aria-labelledby="tableTitle"
+            size='medium'
+            aria-label="enhanced table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell align="left">Status</TableCell>
+                <TableCell align="left">Price</TableCell>
+                <TableCell align="left">Developers</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className={classes.tableBody}>
+              {projectsWithDevs
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((project) => {
+                  return (         
+                    <ProjectTableRow project={project} key={project._id} users={stuffUsers}/>
+                  )
+                }
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={projectsWithDevs.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </div >
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.users.users,
-    projects: state.projects.projects,
-  }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getUsers: () => { dispatch(getUsers()) },
-    getProjects: () => { dispatch(getProjects()) },
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectsTable);
+export default ProjectsTable;

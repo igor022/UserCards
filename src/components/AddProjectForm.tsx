@@ -4,9 +4,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 import { addProject } from '../actions/projectActions';
-import { getUsers } from '../actions/userActions';
 
-import { User, Project } from '../types/types';
+import { User, Project, ProjectWithDevs } from '../types/types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -22,12 +21,9 @@ import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 
 import { withRouter } from 'react-router-dom';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  addButton: {
-    margin: theme.spacing(2, 0, 2),
-  },
   dialog: {
     width: '500px',
     padding: theme.spacing(5),
@@ -60,16 +56,17 @@ const statuses = [
 ]
 
 interface Props {
-  users: Array<User>,
-  getUsers: () => Array<User>,
-  addProject: (project: Project) => void,
-  history: any
+  project: ProjectWithDevs,
+  users: User[],
+  open: boolean,
+  history: any,
+  addProject: (project: Project) => any,
+  handleClose: () => void,
 }
 
 const AddProjectForm: React.FC<Props> = (props) => {
   const classes = useStyles();
-  
-  const [open, setOpen] = useState(false);
+
   const [devNames, setDevNames] = useState<Array<string>>([]);
   const [status, setStatus] = useState('None');
   const [formFields, setFormFields] = useState({
@@ -80,14 +77,6 @@ const AddProjectForm: React.FC<Props> = (props) => {
 
   const { users } = props;
   const stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const changeStatus = (e) => {
     setStatus(e.target.value);
@@ -113,20 +102,12 @@ const AddProjectForm: React.FC<Props> = (props) => {
       props.history.push('/auth/signup');
       return;
     }
-    handleClose();
+    props.handleClose();
   }
-
-
-  useEffect(() => {
-    props.getUsers();
-  }, []);
 
   return (
     <div>
-      <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
-        Add project
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add project</DialogTitle>
         <form
           onSubmit={handleSubmit}
@@ -153,8 +134,8 @@ const AddProjectForm: React.FC<Props> = (props) => {
                 onChange={changeStatus}
               >
                 {
-                  statuses.map((status) => (
-                    <MenuItem value={status}>{status}</MenuItem>
+                  statuses.map((status, i) => (
+                    <MenuItem key={i} value={status}>{status}</MenuItem>
                   ))
                 }
               </Select>
@@ -214,7 +195,7 @@ const AddProjectForm: React.FC<Props> = (props) => {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
             <Button type="submit" color="primary">
@@ -227,18 +208,11 @@ const AddProjectForm: React.FC<Props> = (props) => {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    users: state.users.users
-  }
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUsers: () => { dispatch(getUsers()) },
     addProject: (project) => { dispatch(addProject(project)) }
   }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddProjectForm));
+export default connect(undefined, mapDispatchToProps)(withRouter(AddProjectForm));

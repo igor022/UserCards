@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { getProjects } from '../actions/projectActions';
 import { getUsers } from '../actions/userActions';
 
+import Loading from './Loading';
+
 import Header from './Header';
 import UserCards from './UserCards';
 import ProjectCards from './ProjectCards';
@@ -66,9 +68,9 @@ const Home = (props) => {
           Top developers
         </Typography>
         { 
-          devsWithProjects 
+          !props.usersLoading && devsWithProjects 
           ? <UserCards users={devsWithProjects} cardsAmount={3}/>
-          : ''
+          : <Loading />
         }
         
       </div>
@@ -78,9 +80,9 @@ const Home = (props) => {
           Top projects
         </Typography>
         {
-          projects
+          !props.projectsLoading && projects
           ? <ProjectCards projects={projects} cardsAmount={3}/>
-          : ''
+          : <Loading />
         }    
       </div>
     </div>
@@ -90,7 +92,9 @@ const Home = (props) => {
 const mapStateToProps = (state) => {
   return {
     projects: state.projects.projects,
-    users: state.users.users
+    users: state.users.users,
+    projectsLoading: state.projects.isLoading,
+    usersLoading: state.users.isLoading
   }
 }
 

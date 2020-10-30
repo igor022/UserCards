@@ -19,7 +19,7 @@ import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 
 import { withRouter } from 'react-router-dom';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -121,8 +121,8 @@ const EditProjectForm = (props : Props) => {
                 onChange={changeStatus}
               >
                 {
-                  statuses.map((status) => (
-                    <MenuItem value={status}>{status}</MenuItem>
+                  statuses.map((status, i) => (
+                    <MenuItem key={i} value={status}>{status}</MenuItem>
                   ))
                 }
               </Select>
@@ -150,7 +150,7 @@ const EditProjectForm = (props : Props) => {
                 onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
-                  <div>
+                  <>
                     {
                       (selected as Array<string>).map((id: string) => {
                          const user = users.find((u) => u._id === id); 
@@ -159,7 +159,7 @@ const EditProjectForm = (props : Props) => {
                          : null
                        })
                     }
-                  </div>
+                  </>
                 )}
                 MenuProps={MenuProps}
               >

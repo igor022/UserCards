@@ -16,7 +16,7 @@ const Loading = () => {
 
   return (
     <Typography className={classes.loading} variant="h6" align="center" color="textPrimary" gutterBottom>
-      LOADING...
+      Loading...
     </Typography>
   );
 }
