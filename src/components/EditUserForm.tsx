@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EditUserForm = (props) => {
-  const fileInput = useRef();
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const [open, setOpen] = useState(false);
 
@@ -55,8 +55,10 @@ const EditUserForm = (props) => {
     e.preventDefault();
     
     let file;
-    if (fileInput.current.files.length > 0) {
-      file = fileInput.current.files[0];
+
+    const files = fileInput!.current!.files!;
+    if (files.length > 0) {
+      file = files[0];
       const imageUrl = await uploadFile(file);
       
       if (imageUrl) {
@@ -81,7 +83,6 @@ const EditUserForm = (props) => {
         <DialogTitle id="form-dialog-title">Edit user</DialogTitle>
         <form
           onSubmit={handleSubmit}
-          className={classes.addForm}
           autoComplete="off"
         >
           <DialogContent>

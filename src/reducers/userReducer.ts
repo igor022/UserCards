@@ -1,7 +1,13 @@
 import { GET_USERS_LOADING, GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from '../actions/actionTypes';
 
+import { User } from '../types/types';
 
-const initState = {
+interface UsersState {
+  users: Array<User>,
+  isLoading: boolean
+}
+
+const initState: UsersState = {
   users: [],
   isLoading: false,
 }

@@ -2,15 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { deleteUser } from '../actions/userActions';
-import { getProjects } from '../actions/projectActions';
+import { deleteProject } from '../actions/projectActions';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -48,13 +46,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CardItem = (props) => {
+const ProjectCard = (props) => {
   const classes = useStyles();
-  const { user } = props;
+  const { project } = props;
   
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
-
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -68,7 +65,7 @@ const CardItem = (props) => {
   }
 
   const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    if (anchorRef.current && (anchorRef!.current! as any).contains(event.target)) {
       return;
     }
 
@@ -79,7 +76,7 @@ const CardItem = (props) => {
 
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
+      (anchorRef!.current! as any).focus();
     }
     prevOpen.current = open;
   }, [open]);
@@ -89,9 +86,10 @@ const CardItem = (props) => {
       <Card className={classes.card}>
         <CardHeader
           action={
-            localStorage.getItem('jwt') && (      
+            (localStorage.getItem('jwt') && localStorage.getItem('id') === project.stuffId) && (      
               <div>
                 <IconButton 
+                  component="button"
                   aria-label="settings"
                   ref={anchorRef}
                   aria-controls={open ? 'menu-list-grow' : undefined}
@@ -110,9 +108,9 @@ const CardItem = (props) => {
                         <ClickAwayListener onClickAway={handleClose}>
                           <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                             <MenuItem onClick={handleClose}>
-                              <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
+                              <Link className={classes.link} to={`/projects/${project._id}`}>Project</Link>
                             </MenuItem>
-                            <MenuItem onClick={() => props.deleteUser(user._id)}>Delete</MenuItem>
+                            <MenuItem onClick={() => props.deleteProject(project._id)}>Delete</MenuItem>
                           </MenuList>
                         </ClickAwayListener>
                       </Paper>
@@ -122,20 +120,15 @@ const CardItem = (props) => {
               </div>        
             )
           }
-          title={user.name}
-          subheader={user.email}
-        />
-        <CardMedia
-          className={classes.cardMedia}
-          image={user.imageUrl && user.imageUrl.length > 0 ? user.imageUrl : `https://robohash.org/${user._id}`}
-          title="Image title"
+          title={project.name}
+          subheader={`$${project.price}`}
         />
         <CardContent className={classes.cardContent}>
           <Typography>
             {
-              user.description.length > 40
-              ? `${user.description.slice(0, 40)}...`
-              : user.description
+              project.description.length > 40
+              ? `${project.description.slice(0, 40)}...`
+              : project.description
             }       
           </Typography>
         </CardContent>
@@ -146,8 +139,8 @@ const CardItem = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteUser: (id) => { dispatch(deleteUser(id))}
+    deleteProject: (id) => { dispatch(deleteProject(id))}
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(CardItem);
+export default connect(null, mapDispatchToProps)(ProjectCard);

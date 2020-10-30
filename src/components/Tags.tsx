@@ -56,13 +56,12 @@ const Tags = (props) => {
   return (
     <Box component="ul" className={classes.root}>
       <li className={classes.chip}>
-        <IconButton onClick={handleClickOpen} color="primary" variant="contained" size="small" className={classes.margin}>
+        <IconButton onClick={handleClickOpen} color="primary" size="small">
           <AddIcon />
         </IconButton>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
           <form
             onSubmit={handleSubmit}
-            className={classes.addForm}
             autoComplete="off"
           >
             <DialogContent>

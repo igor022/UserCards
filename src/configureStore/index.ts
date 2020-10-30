@@ -7,7 +7,7 @@ import loggerMiddleware from '../middleware/logger';
 import monitorReducerEnhancer from '../enhancers/monitorReducer';
 
 export default function configureStore(preloadedState) {
-  const middlewares = [thunkMiddleware];
+  const middlewares: Array<any> = [thunkMiddleware];
   
   if (process.env.NODE_ENV === 'development') {
     middlewares.push(loggerMiddleware);
@@ -15,7 +15,7 @@ export default function configureStore(preloadedState) {
   
   const middlewareEnhancer = applyMiddleware(...middlewares);
   
-  const enhancers = [middlewareEnhancer];
+  const enhancers: Array<any> = [middlewareEnhancer];
   if (process.env.NODE_ENV === 'development') {
     enhancers.push(monitorReducerEnhancer);
   }

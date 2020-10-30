@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+import { Project } from '../types/types';
+
 const api = process.env.REACT_APP_API;
 
-const addProject = async (project) => {
+const addProject = async (project: Project) => {
   try {
     const { data } = await axios.post(
       `${api}/projects`, 

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { editProject } from '../actions/projectActions';
-import { getUsers } from '../actions/userActions';
+
+import { User, Project, ProjectWithDevs } from '../types/types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -44,7 +45,15 @@ const statuses = [
   'None', 'Active', 'Pending', 'Done', 'Closed'
 ]
 
-const EditProjectForm = (props) => {
+interface Props {
+  project: ProjectWithDevs,
+  users: User[],
+  open: boolean,
+  editProject: (project: Project) => any,
+  handleClose: () => void,
+}
+
+const EditProjectForm = (props : Props) => {
   const classes = useStyles();
 
   const { project, users } = props;
@@ -57,7 +66,7 @@ const EditProjectForm = (props) => {
     description: project.description,
   });
 
-  const [devNames, setDevNames] = useState([]);
+  const [devNames, setDevNames] = useState<Array<string>>(project.devs.map((dev) => dev._id));
 
   const handleChange = (e) => {
     setFormFields({
@@ -67,6 +76,7 @@ const EditProjectForm = (props) => {
   }
 
   const changeDevs = (e) => {
+    console.log(e.target.value);
     setDevNames(e.target.value);
   };
 
@@ -76,8 +86,7 @@ const EditProjectForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const devs = devNames.map((dev) => dev._id);
-    props.editProject({ ...project, ...formFields, devs, status });
+    props.editProject({ ...project, ...formFields, devs: devNames, status });
     props.handleClose();
   }
 
@@ -89,7 +98,6 @@ const EditProjectForm = (props) => {
         <DialogTitle id="form-dialog-title">Edit project</DialogTitle>
         <form
           onSubmit={handleSubmit}
-          className={classes.addForm}
           autoComplete="off"
         >
           <DialogContent>
@@ -137,20 +145,26 @@ const EditProjectForm = (props) => {
                 labelId="demo-mutiple-chip-label"
                 id="devs"
                 multiple
+                defaultValue={project.devs}
                 value={devNames}
                 onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
-                  <div className={classes.chips}>
-                    {selected.map((user) => (
-                      <Chip key={user._id} label={user.name} className={classes.chip} />
-                    ))}
+                  <div>
+                    {
+                      (selected as Array<string>).map((id: string) => {
+                         const user = users.find((u) => u._id === id); 
+                         return user 
+                         ? <Chip key={user._id} label={user.name} />
+                         : null
+                       })
+                    }
                   </div>
                 )}
                 MenuProps={MenuProps}
               >
-                {props.users.map((user) => (
-                  <MenuItem key={user._id} value={user}>
+                {users.map((user) => (
+                  <MenuItem key={user._id} value={user._id}>
                     {user.name}
                   </MenuItem>
                 ))}

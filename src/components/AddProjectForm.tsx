@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 import { addProject } from '../actions/projectActions';
 import { getUsers } from '../actions/userActions';
 
+import { User, Project } from '../types/types';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -57,11 +59,18 @@ const statuses = [
   'None', 'Active', 'Pending', 'Done', 'Closed'
 ]
 
-const AddProjectForm = (props) => {
+interface Props {
+  users: Array<User>,
+  getUsers: () => Array<User>,
+  addProject: (project: Project) => void,
+  history: any
+}
+
+const AddProjectForm: React.FC<Props> = (props) => {
   const classes = useStyles();
   
   const [open, setOpen] = useState(false);
-  const [devNames, setDevNames] = useState([]);
+  const [devNames, setDevNames] = useState<Array<string>>([]);
   const [status, setStatus] = useState('None');
   const [formFields, setFormFields] = useState({
     name: '',
@@ -99,8 +108,7 @@ const AddProjectForm = (props) => {
     e.preventDefault();
     const id = localStorage.getItem('id');
     if (id) {
-      const devs = devNames.map((person) => person._id);
-      props.addProject({ ...formFields, devs, status, stuffId: id });
+      props.addProject({ ...formFields, devs: devNames, status, stuffId: id });
     } else {
       props.history.push('/auth/signup');
       return;
@@ -122,7 +130,6 @@ const AddProjectForm = (props) => {
         <DialogTitle id="form-dialog-title">Add project</DialogTitle>
         <form
           onSubmit={handleSubmit}
-          className={classes.addForm}
           autoComplete="off"
         >
           <DialogContent>
@@ -174,16 +181,21 @@ const AddProjectForm = (props) => {
                 onChange={changeDevs}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
-                  <div className={classes.chips}>
-                    {selected.map((user) => (
-                      <Chip key={user._id} label={user.name} className={classes.chip} />
-                    ))}
+                  <div>
+                    {
+                      (selected as Array<string>).map((id: string) => {
+                        const user = stuffUsers.find((u) => u._id === id); 
+                        return user 
+                        ? <Chip key={user._id} label={user.name} />
+                        : null
+                      })
+                    }
                   </div>
                 )}
                 MenuProps={MenuProps}
               >
                 {stuffUsers.map((user) => (
-                  <MenuItem key={user._id} value={user}>
+                  <MenuItem key={user._id} value={user._id}>
                     {user.name}
                   </MenuItem>
                 ))}

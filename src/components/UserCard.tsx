@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { deleteProject } from '../actions/projectActions';
+import { deleteUser } from '../actions/userActions';
+import { getProjects } from '../actions/projectActions';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -46,12 +48,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProjectCard = (props) => {
+const CardItem = (props) => {
   const classes = useStyles();
-  const { project } = props;
+  const { user } = props;
   
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
+
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -65,7 +68,7 @@ const ProjectCard = (props) => {
   }
 
   const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    if (anchorRef.current && (anchorRef!.current! as any).contains(event.target)) {
       return;
     }
 
@@ -76,7 +79,7 @@ const ProjectCard = (props) => {
 
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
+      (anchorRef!.current! as any).focus();
     }
     prevOpen.current = open;
   }, [open]);
@@ -86,7 +89,7 @@ const ProjectCard = (props) => {
       <Card className={classes.card}>
         <CardHeader
           action={
-            (localStorage.getItem('jwt') && localStorage.getItem('id') === project.stuffId) && (      
+            localStorage.getItem('jwt') && (      
               <div>
                 <IconButton 
                   aria-label="settings"
@@ -107,9 +110,9 @@ const ProjectCard = (props) => {
                         <ClickAwayListener onClickAway={handleClose}>
                           <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                             <MenuItem onClick={handleClose}>
-                              <Link className={classes.link} to={`/projects/${project._id}`}>Project</Link>
+                              <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
                             </MenuItem>
-                            <MenuItem onClick={() => props.deleteProject(project._id)}>Delete</MenuItem>
+                            <MenuItem onClick={() => props.deleteUser(user._id)}>Delete</MenuItem>
                           </MenuList>
                         </ClickAwayListener>
                       </Paper>
@@ -119,15 +122,20 @@ const ProjectCard = (props) => {
               </div>        
             )
           }
-          title={project.name}
-          subheader={`$${project.price}`}
+          title={user.name}
+          subheader={user.email}
+        />
+        <CardMedia
+          className={classes.cardMedia}
+          image={user.imageUrl && user.imageUrl.length > 0 ? user.imageUrl : `https://robohash.org/${user._id}`}
+          title="Image title"
         />
         <CardContent className={classes.cardContent}>
           <Typography>
             {
-              project.description.length > 40
-              ? `${project.description.slice(0, 40)}...`
-              : project.description
+              user.description.length > 40
+              ? `${user.description.slice(0, 40)}...`
+              : user.description
             }       
           </Typography>
         </CardContent>
@@ -138,8 +146,8 @@ const ProjectCard = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteProject: (id) => { dispatch(deleteProject(id))}
+    deleteUser: (id) => { dispatch(deleteUser(id))}
   }
 }
 
-export default connect(null, mapDispatchToProps)(ProjectCard);
+export default connect(undefined, mapDispatchToProps)(CardItem);

@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { getProjects } from '../actions/projectActions';
 import { getUsers, editUser, deleteUser } from '../actions/userActions';
 
+import { Project, User } from '../types/types';
+
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -16,7 +18,7 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 import EditUserForm from './EditUserForm';
-import Tags from './Tags.jsx';
+import Tags from './Tags';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -67,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const User = (props) => {
+const UserProfile = (props) => {
   const classes = useStyles();
   
   const {users, projects} = props;
@@ -81,7 +83,7 @@ const User = (props) => {
     }
   }
 
-  let devProjects = [];
+  let devProjects: Array<Project> = [];
   if (projects && user) {
     devProjects = projects.filter((project) => project.devs.find((dev) => dev === user._id));
   }
@@ -138,14 +140,14 @@ const User = (props) => {
                 
               </Grid>
             </Grid>
-            <Tags tags={user.tags} className={classes.tags} addTag={addTag} deleteTag={deleteTag}/>
+            <Tags tags={user.tags} addTag={addTag} deleteTag={deleteTag}/>
             <hr></hr>
             <Typography variant="h6"  color="textPrimary">
               Projects:
             </Typography>
             <ul className={classes.projects}>
               {
-                devProjects.map((project) => (
+                devProjects.map((project : Project) => (
                   <li key={project._id}>
                     <Link className={classes.navLink} to={`/projects/${project._id}`}>
                       <Chip
@@ -202,4 +204,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(User));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UserProfile));

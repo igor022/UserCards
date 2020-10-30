@@ -7,7 +7,7 @@ import configureStore from './configureStore';
 
 import './index.css';
 
-const store = configureStore();
+const store = configureStore(undefined);
 
 ReactDOM.render(
   <Provider store={store}>

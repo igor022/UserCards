@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddUserForm = (props) => {
-  const fileInput = useRef();
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const [open, setOpen] = useState(false);
 
@@ -43,22 +43,23 @@ const AddUserForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const id = localStorage.getItem('id');
-    if (id) {
-      formFields.stuffId = id;
+    const stuffId = localStorage.getItem('id');
+    if (stuffId) {
       let file;
-      if (fileInput.current.files.length > 0) {
-        file = fileInput.current.files[0];
+
+      const files = fileInput!.current!.files!;
+      if (files.length > 0) {
+        file = files[0];
         const imageUrl = await uploadFile(file);
-        
+      
         if (imageUrl) {
-          props.addUser({ ...formFields, imageUrl });
+          props.addUser({ ...formFields, imageUrl, stuffId });
         }  else {
-          props.addUser(formFields);
+          props.addUser({ ...formFields, stuffId });
         }
       
       } else {
-        props.addUser(formFields);
+        props.addUser({ ...formFields, stuffId });
       }
     } else {
       props.history.push('/auth/signup');
@@ -87,7 +88,6 @@ const AddUserForm = (props) => {
         <DialogTitle id="form-dialog-title">Add user</DialogTitle>
           <form
             onSubmit={handleSubmit} 
-            className={classes.addForm} 
             autoComplete="off"
           > 
             <DialogContent>    

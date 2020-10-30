@@ -1,7 +1,13 @@
 import { GET_PROJECTS_LOADING, GET_PROJECTS, ADD_PROJECT, DELETE_PROJECT, EDIT_PROJECT } from '../actions/actionTypes';
 
+import { Project } from '../types/types';
 
-const initState = {
+interface ProjectsState {
+  projects: Array<Project>,
+  isLoading: boolean
+}
+
+const initState: ProjectsState = {
   projects: [],
   isLoading: false,
 }
@@ -30,8 +36,8 @@ const projectReducer = (state = initState, {type, payload}) => {
 
     case ADD_PROJECT: 
       {
-        const { project } = payload;
-        const projects = [...state.projects];
+        const project: Project = payload.project;
+        const projects: Array<Project> = [...state.projects];
         projects.unshift(project);
         return {
           ...state,
@@ -42,8 +48,8 @@ const projectReducer = (state = initState, {type, payload}) => {
 
     case EDIT_PROJECT:
       {
-        const { project } = payload;
-        const projects = [...state.projects];
+        const project: Project = payload.project;
+        const projects: Array<Project> = [...state.projects];
         const projectToEdit = projects.findIndex((p) => p._id === project._id);
         projects.splice(projectToEdit, 1, project);
         return {
@@ -56,7 +62,7 @@ const projectReducer = (state = initState, {type, payload}) => {
     case DELETE_PROJECT: 
       {
         const { id } = payload;
-        const projects = state.projects.filter((p) => p._id !== id);
+        const projects = (state as ProjectsState).projects.filter((p) => p._id !== id);
         return {
           ...state,
           projects

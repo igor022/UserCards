@@ -10,7 +10,11 @@ export const uploadFile = async (file) => {
     secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
   }
   
-  const data = await upload(file, newFileName, config);
+  interface Upload {
+    key: string,
+  }
+
+  const data = await upload(file, newFileName, config) as Upload;
   return `https://cards-images.s3-eu-central-1.amazonaws.com/${data.key}`;
 }
 
