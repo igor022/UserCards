@@ -55,6 +55,7 @@ const statuses = [
   'None', 'Active', 'Pending', 'Done', 'Closed'
 ]
 
+
 interface Props {
   project: ProjectWithDevs,
   users: User[],

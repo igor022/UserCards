@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 const AddUserForm = (props) => {
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const [open, setOpen] = useState(false);
 
   const [formFields, setFormFields] = useState({
     name: '',
@@ -66,25 +65,17 @@ const AddUserForm = (props) => {
       return;
     }
 
-    handleClose();
+    props.handleClose();
   }
 
   const classes = useStyles();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div>
-      <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
-        Add user
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+
+      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add user</DialogTitle>
           <form
             onSubmit={handleSubmit} 
@@ -123,7 +114,7 @@ const AddUserForm = (props) => {
                 />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={props.handleClose} color="primary">
                 Cancel
               </Button>
               <Button type="submit" color="primary">

@@ -92,108 +92,105 @@ const EditProjectForm = (props : Props) => {
 
 
   return (
-    <div>
-  
-      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Edit project</DialogTitle>
-        <form
-          onSubmit={handleSubmit}
-          autoComplete="off"
-        >
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              value={formFields.name}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel id="statusLabel">Status</InputLabel>
-              <Select 
-                labelId="statusLabel"           
-                id="status"
-                value={status}
-                onChange={changeStatus}
-              >
-                {
-                  statuses.map((status, i) => (
-                    <MenuItem key={i} value={status}>{status}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
-            <TextField
-              id="price"
-              margin="dense"
-              label="Price"
-              type="text"
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.price}
-              onChange={handleChange}
-            />
+    <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+      <DialogTitle id="form-dialog-title">Edit project</DialogTitle>
+      <form
+        onSubmit={handleSubmit}
+        autoComplete="off"
+      >
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="text"
+            value={formFields.name}
+            fullWidth
+            required
+            onChange={handleChange}
+          />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="statusLabel">Status</InputLabel>
+            <Select 
+              labelId="statusLabel"           
+              id="status"
+              value={status}
+              onChange={changeStatus}
+            >
+              {
+                statuses.map((status, i) => (
+                  <MenuItem key={i} value={status}>{status}</MenuItem>
+                ))
+              }
+            </Select>
+          </FormControl>
+          <TextField
+            id="price"
+            margin="dense"
+            label="Price"
+            type="text"
+            multiline
+            rowsMax={4}
+            fullWidth
+            value={formFields.price}
+            onChange={handleChange}
+          />
 
-            <FormControl className={classes.formControl}>
-              <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
-              <Select
-                labelId="demo-mutiple-chip-label"
-                id="devs"
-                multiple
-                defaultValue={project.devs}
-                value={devNames}
-                onChange={changeDevs}
-                input={<Input id="select-multiple-chip" />}
-                renderValue={(selected) => (
-                  <>
-                    {
-                      (selected as Array<string>).map((id: string) => {
-                         const user = users.find((u) => u._id === id); 
-                         return user 
-                         ? <Chip key={user._id} label={user.name} />
-                         : null
-                       })
-                    }
-                  </>
-                )}
-                MenuProps={MenuProps}
-              >
-                {users.map((user) => (
-                  <MenuItem key={user._id} value={user._id}>
-                    {user.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
+            <Select
+              labelId="demo-mutiple-chip-label"
+              id="devs"
+              multiple
+              defaultValue={project.devs}
+              value={devNames}
+              onChange={changeDevs}
+              input={<Input id="select-multiple-chip" />}
+              renderValue={(selected) => (
+                <>
+                  {
+                    (selected as Array<string>).map((id: string) => {
+                        const user = users.find((u) => u._id === id); 
+                        return user 
+                        ? <Chip key={user._id} label={user.name} />
+                        : null
+                      })
+                  }
+                </>
+              )}
+              MenuProps={MenuProps}
+            >
+              {users.map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-            <TextField
-              id="description"
-              margin="dense"
-              label="About"
-              type="text"
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.description}
-              onChange={handleChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={props.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button type="submit" color="primary">
-              Edit
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+          <TextField
+            id="description"
+            margin="dense"
+            label="About"
+            type="text"
+            multiline
+            rowsMax={4}
+            fullWidth
+            value={formFields.description}
+            onChange={handleChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Edit
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 }
 
