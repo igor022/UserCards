@@ -2,6 +2,8 @@ import React from 'react';
 
 import UserCard from './UserCard';
 
+import { User } from '../types/types';
+
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -22,8 +24,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+interface Props {
+  users: User[],
+  cardsAmount?: number
+}
 
-const UserCards = (props) => {
+const UserCards: React.FC<Props> = (props) => {
   
   const { users } = props;
   const classes = useStyles();

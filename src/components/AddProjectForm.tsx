@@ -208,7 +208,7 @@ const AddProjectForm: React.FC<Props> = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addProject: (project) => { dispatch(addProject(project)) }
+    addProject: (project: Project) => { dispatch(addProject(project)) }
   }
 }
 

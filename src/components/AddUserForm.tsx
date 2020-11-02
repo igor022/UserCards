@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { uploadFile } from '../api/s3';
 import { addUser } from '../actions/userActions';
 
-import { AddUser } from '../types/types';
+import { User, AddUser } from '../types/types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -125,7 +125,7 @@ const AddUserForm: React.FC<Props> = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addUser: (user) => { dispatch(addUser(user)) }
+    addUser: (user: User) => { dispatch(addUser(user)) }
   }
 }
 

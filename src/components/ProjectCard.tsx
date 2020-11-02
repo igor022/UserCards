@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { deleteProject } from '../actions/projectActions';
 
+import { Project, DeleteProject } from '../types/types';
+
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -46,7 +48,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProjectCard = (props) => {
+interface Props {
+  project: Project,
+  deleteProject: DeleteProject
+}
+
+const ProjectCard: React.FC<Props> = (props) => {
   const classes = useStyles();
   const { project } = props;
   
@@ -110,7 +117,7 @@ const ProjectCard = (props) => {
                             <MenuItem onClick={handleClose}>
                               <Link className={classes.link} to={`/projects/${project._id}`}>Project</Link>
                             </MenuItem>
-                            <MenuItem onClick={() => props.deleteProject(project._id)}>Delete</MenuItem>
+                            <MenuItem onClick={() => props.deleteProject(project._id as string)}>Delete</MenuItem>
                           </MenuList>
                         </ClickAwayListener>
                       </Paper>
@@ -139,7 +146,7 @@ const ProjectCard = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteProject: (id) => { dispatch(deleteProject(id))}
+    deleteProject: (id: string) => { dispatch(deleteProject(id))}
   }
 }
 

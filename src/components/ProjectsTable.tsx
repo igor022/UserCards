@@ -69,11 +69,11 @@ interface Props {
 
 }
 
-const ProjectsTable = (props : Props) => {
+const ProjectsTable: React.FC<Props> = (props) => {
   const classes = useStyles();
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const { projectsWithDevs, stuffUsers } = props;
 
@@ -82,7 +82,7 @@ const ProjectsTable = (props : Props) => {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value));
     setPage(0);
   };
 

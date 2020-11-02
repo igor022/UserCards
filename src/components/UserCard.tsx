@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { deleteUser } from '../actions/userActions';
 import { getProjects } from '../actions/projectActions';
 
+import { User, DeleteUser } from '../types/types';
+
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -48,7 +50,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CardItem = (props) => {
+interface Props {
+  user: User,
+  deleteUser: DeleteUser
+}
+
+const CardItem: React.FC<Props> = (props) => {
   const classes = useStyles();
   const { user } = props;
   
@@ -112,7 +119,7 @@ const CardItem = (props) => {
                             <MenuItem onClick={handleClose}>
                               <Link className={classes.link} to={`/users/${user._id}`}>Profile</Link>
                             </MenuItem>
-                            <MenuItem onClick={() => props.deleteUser(user._id)}>Delete</MenuItem>
+                            <MenuItem onClick={() => props.deleteUser(user._id as string)}>Delete</MenuItem>
                           </MenuList>
                         </ClickAwayListener>
                       </Paper>
@@ -146,7 +153,7 @@ const CardItem = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteUser: (id) => { dispatch(deleteUser(id))}
+    deleteUser: (id: string) => { dispatch(deleteUser(id))}
   }
 }
 

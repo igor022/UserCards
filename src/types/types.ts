@@ -35,7 +35,7 @@ export interface ProjectWithDevs {
     stuffId: string,
 }
 
-type FieldToEdit = {
+export type FieldToEdit = {
     _id: string,
     [propName: string]: any
 }

@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 
 import { getUsers } from '../actions/userActions';
 
+import { User, GetUsers } from '../types/types';
 
-import Button from '@material-ui/core/Button';
 import Cards from './UserCards';
 import AddUserForm from './AddUserForm';
 import Loading from './Loading';
 
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,11 +27,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+interface Props {
+  users: User[],
+  isLoading: boolean,
+  getUsers: GetUsers,
+}
 
-const Users = (props) => {
+const Users: React.FC<Props> = (props) => {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const users = props.users;
 

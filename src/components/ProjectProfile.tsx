@@ -7,7 +7,7 @@ import { getUsers } from '../actions/userActions';
 import MiniUser from './MiniUser';
 import Status from './Status';
 
-import { Project, User, GetUsers, GetProjects, EditProject, DeleteProject } from '../types/types';
+import { Project, User, GetUsers, GetProjects, EditProject, DeleteProject, FieldToEdit } from '../types/types';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -197,8 +197,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getUsers: () => { dispatch(getUsers()) },
     getProjects: () => { dispatch(getProjects()) },
-    editProject: (project) => { dispatch(editProject(project)) },
-    deleteProject: (id) => { dispatch(deleteProject(id)) },
+    editProject: (project: FieldToEdit) => { dispatch(editProject(project)) },
+    deleteProject: (id: string) => { dispatch(deleteProject(id)) },
   }
 }
 

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { getProjects } from '../actions/projectActions';
 import { getUsers, editUser, deleteUser } from '../actions/userActions';
 
-import { Project, User } from '../types/types';
+import { Project, User, FieldToEdit, GetProjects, GetUsers, EditUser, DeleteUser } from '../types/types';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -72,15 +72,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const UserProfile = (props) => {
+interface Props {
+  users: User[],
+  projects: Project[],
+  getProjects: GetProjects,
+  getUsers: GetUsers,
+  editUser: EditUser,
+  deleteUser: DeleteUser,
+  [propNames: string]: any
+}
+
+const UserProfile: React.FC<Props> = (props) => {
   const classes = useStyles();
   
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const {users, projects} = props;
   const userId = props.match.params.id;
   
-  let user;
+  let user : User | undefined;
   if (users && users.length) {
     user = users.find((user) => user._id === userId);
     if (!user) {
@@ -90,7 +100,7 @@ const UserProfile = (props) => {
 
   let devProjects: Array<Project> = [];
   if (projects && user) {
-    devProjects = projects.filter((project) => project.devs.find((dev) => dev === user._id));
+    devProjects = projects.filter((project) => project.devs.find((dev) => dev === user!._id));
   }
 
   useEffect(() => {
@@ -104,16 +114,15 @@ const UserProfile = (props) => {
   }
 
   const addTag = (tag) => {
-    const edited = {...user};
+    const edited: User = {...user} as User;
     edited.tags.push(tag);
-    props.editUser(edited);
+    props.editUser({ _id: edited._id as string, ...edited });
   }
 
   const deleteTag = (tag) => {
-    const edited = {...user};
-    const tags = user.tags.filter((t) => t !== tag)
-    edited.tags = tags;
-    props.editUser(edited);
+    const edited: User = {...user} as User;
+    edited.tags = edited.tags.filter((t) => t !== tag);
+    props.editUser({ _id: edited._id as string, ...edited });
   }
 
   const handleClickOpen = () => {
@@ -189,7 +198,7 @@ const UserProfile = (props) => {
                     Edit user
                   </Button>
                   <EditUserForm open={open} user={user} handleClose={handleClose}/>
-                  <Button className={classes.deleteButton} onClick={() => handleDelete(user._id)} variant="contained" color="secondary">
+                  <Button className={classes.deleteButton} onClick={() => handleDelete(user!._id)} variant="contained" color="secondary">
                     Delete user
                   </Button>
                 </>
@@ -215,8 +224,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getProjects: () => {dispatch(getProjects())},
     getUsers: () => { dispatch(getUsers()) },
-    editUser: (user) => { dispatch(editUser(user)) },
-    deleteUser: (id) => { dispatch(deleteUser(id)) },
+    editUser: (user: FieldToEdit) => { dispatch(editUser(user)) },
+    deleteUser: (id: string) => { dispatch(deleteUser(id)) },
   }
 }
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { editProject } from '../actions/projectActions';
 
-import { User, Project, ProjectWithDevs } from '../types/types';
+import { User, Project, ProjectWithDevs, FieldToEdit } from '../types/types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -76,7 +76,6 @@ const EditProjectForm: React.FC<Props> = (props) => {
   }
 
   const changeDevs = (e) => {
-    console.log(e.target.value);
     setDevNames(e.target.value);
   };
 
@@ -196,7 +195,7 @@ const EditProjectForm: React.FC<Props> = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    editProject: (project) => { dispatch(editProject(project)) }
+    editProject: (project: FieldToEdit) => { dispatch(editProject(project)) }
   }
 }
 

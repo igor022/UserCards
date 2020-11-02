@@ -5,7 +5,7 @@ import { editUser } from '../actions/userActions';
 
 import { uploadFile } from '../api/s3';
 
-import { User, EditUser } from '../types/types';
+import { User, EditUser, FieldToEdit } from '../types/types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -123,7 +123,7 @@ const EditUserForm: React.FC<Props> = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    editUser: (user) => { dispatch(editUser(user)) }
+    editUser: (user: FieldToEdit) => { dispatch(editUser(user)) }
   }
 }
 

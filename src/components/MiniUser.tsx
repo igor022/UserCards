@@ -22,7 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MiniUser = (props) => {
+interface Props {
+  id: string,
+  name: string,
+  imageUrl: string
+}
+
+const MiniUser: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   return (

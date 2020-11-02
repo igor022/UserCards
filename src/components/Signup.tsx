@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(4),
+  },
+  error: { 
+    color: 'red', 
+    fontSize: '0.75em' 
   }
 }));
 
@@ -57,14 +61,6 @@ const SignupSchema = Yup.object().shape({
 const Signup = (props) => {
   const classes = useStyles();
 
-  const [formFields, setFormFields] = useState({
-    name: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
-  });
-
-  const error = { color: 'red', fontSize: '0.75em' };
 
   const handleSubmit = async (values) => {
     const { name, email, password, repeatPassword } = values;
@@ -109,22 +105,22 @@ const Signup = (props) => {
                 <div>name</div>
                 <Field name="name"/>
                 {errors.name && touched.name ? (
-                  <div style={error}>{errors.name}</div>
+                  <div className={classes.error}>{errors.name}</div>
                 ) : null}
                 <div>email</div>
                 <Field name="email" type="email"/>
                 {errors.email && touched.email ? (
-                  <div style={error}>{errors.email}</div>
+                  <div className={classes.error}>{errors.email}</div>
                 ) : null}
                 <div>password</div>
                 <Field name="password" type="password"/>
                 {errors.password && touched.password ? (
-                  <div style={error}>{errors.password}</div>
+                  <div className={classes.error}>{errors.password}</div>
                 ) : null}
                 <div>repeat password</div>
                 <Field name="repeatPassword" type="password"/>
                 {errors.repeatPassword && touched.repeatPassword ? (
-                  <div style={error}>{errors.repeatPassword}</div>
+                  <div className={classes.error}>{errors.repeatPassword}</div>
                 ) : null}
                 <div></div>
                 <Button type="submit" className={classes.submit} variant="contained" color="primary">

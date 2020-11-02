@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(4),
+  },
+  error: {
+    color: 'red', 
+    fontSize: '0.75em'
   }
 }));
 
@@ -71,8 +75,6 @@ const Login = (props) => {
     }
   }
 
-  const error = { color: 'red', fontSize: '0.75em' };
-
   return (
     <Box className={classes.root}>
       <Container className={classes.container} maxWidth="xs">
@@ -93,12 +95,12 @@ const Login = (props) => {
                 <div>email</div>
                 <Field name="email" type="email"/>
                 {errors.email && touched.email ? (
-                  <div style={error}>{errors.email}</div>
+                  <div className={classes.error}>{errors.email}</div>
                 ) : null}
                 <div>password</div>
                 <Field name="password" type="password"/>
                 {errors.password && touched.password ? (
-                  <div style={error}>{errors.password}</div>
+                  <div className={classes.error}>{errors.password}</div>
                 ) : null}
                 <div></div>
                 <Button type="submit" className={classes.submit} variant="contained" color="primary">

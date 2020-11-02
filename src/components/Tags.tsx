@@ -24,13 +24,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Tags = (props) => {
+interface Props {
+  tags: string[],
+  addTag: (tag: string) => void,
+  deleteTag: (tag: string) => void
+}
+
+const Tags: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   const { tags, addTag, deleteTag } = props;
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState<string>('');
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleClickOpen = () => {
     setOpen(true);

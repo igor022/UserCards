@@ -1,11 +1,14 @@
 import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import ProjectCard from './ProjectCard';
 
+import { Project } from '../types/types';
+
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -21,8 +24,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+interface Props {
+  projects: Project[],
+  cardsAmount?: number
+}
 
-const ProjectCards = (props) => {
+const ProjectCards: React.FC<Props> = (props) => {
   
   const { projects } = props;
   const classes = useStyles();
@@ -40,7 +47,7 @@ const ProjectCards = (props) => {
           ? 
           stuffProjects
             .slice(0, props.cardsAmount)
-            .map((project, i) => (
+            .map((project) => (
               <ProjectCard 
                 key={project._id} 
                 project={project} 

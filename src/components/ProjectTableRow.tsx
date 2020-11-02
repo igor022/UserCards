@@ -8,7 +8,7 @@ import EditProjectForm from './EditProjectForm';
 
 import { deleteProject } from '../actions/projectActions';
 
-import { Project, User, ProjectWithDevs } from '../types/types';
+import { Project, User, ProjectWithDevs, DeleteProject } from '../types/types';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -43,13 +43,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProjectTableRow = (props) => {
+interface Props {
+  users: User[],
+  project: ProjectWithDevs,
+  deleteProject: DeleteProject,
+}
+
+const ProjectTableRow: React.FC<Props> = (props) => {
 
   const classes = useStyles();
   const { project } = props;
 
-  const [open, setOpen] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState(undefined);
+  const [open, setOpen] = useState<boolean>(false);
+  const [projectToEdit, setProjectToEdit] = useState<Project | undefined>(undefined);
 
   const handleOpen = (id) => {
     setProjectToEdit(id);
@@ -74,7 +80,7 @@ const ProjectTableRow = (props) => {
           {
             project.devs.slice(0, 5).map((dev) => (
               <li key={dev._id} >
-                <MiniUser id={dev._id} name={dev.name} imageUrl={dev.imageUrl}/>
+                <MiniUser id={dev._id as string} name={dev.name} imageUrl={dev.imageUrl}/>
               </li>
             ))
           }
@@ -89,7 +95,7 @@ const ProjectTableRow = (props) => {
         <IconButton className={classes.action} onClick={() => handleOpen(project._id)}>            
           <EditIcon />
         </IconButton>
-        <IconButton className={classes.action} onClick={() => props.deleteProject(project._id)}>
+        <IconButton className={classes.action} onClick={() => props.deleteProject(project._id as string)}>
           <DeleteIcon />
         </IconButton>
       </TableCell>
@@ -101,7 +107,7 @@ const ProjectTableRow = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteProject: (id) => { dispatch(deleteProject(id)) }
+    deleteProject: (id: string) => { dispatch(deleteProject(id)) }
   }
 }
 export default connect(undefined, mapDispatchToProps)(ProjectTableRow);
