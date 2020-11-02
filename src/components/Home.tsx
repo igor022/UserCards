@@ -6,12 +6,15 @@ import { getUsers } from '../actions/userActions';
 
 import Loading from './Loading';
 
+import { User, Project, ProjectWithDevs, GetProjects, GetUsers } from '../types/types';
+
 import Header from './Header';
 import UserCards from './UserCards';
 import ProjectCards from './ProjectCards';
 import Typography from '@material-ui/core/Typography';
 
 import { makeStyles } from '@material-ui/core/styles';
+
 
 const useStyles = makeStyles((theme) => ({
   userCards: {
@@ -27,13 +30,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Home = (props) => {
+interface Props {
+  users: User[],
+  projects: Project[],
+  usersLoading: boolean,
+  projectsLoading: boolean,
+  getUsers: GetUsers,
+  getProjects: GetProjects,
+}
+
+const Home: React.FC<Props> = (props) => {
   const classes = useStyles();
 
-  const { users, projects } = props;
-
+  const users = props.users;
+  const projects = [...props.projects];
+  
   if (projects) {
-    projects.sort((a, b) => (b.price - a.price));
+    projects.sort((a, b) => (parseInt(b.price) - parseInt(a.price)));
   }
 
   let devsWithProjects;
@@ -48,7 +61,7 @@ const Home = (props) => {
       };
     })
   }
-  
+
   devsWithProjects.sort((a, b) => {
     const priceA = a.devProjects.reduce((prev, cur) => (prev + parseInt(cur.price)), 0);
     const priceB = b.devProjects.reduce((prev, cur) => (prev + parseInt(cur.price)), 0);

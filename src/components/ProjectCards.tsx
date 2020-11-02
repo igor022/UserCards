@@ -3,6 +3,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import ProjectCard from './ProjectCard';
 
 
@@ -11,6 +12,13 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
+  header: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: theme.spacing(2)
+  }
 }));
 
 
@@ -41,7 +49,9 @@ const ProjectCards = (props) => {
             )
           )
           : (
-            <p>No projects</p>
+            <Typography className={classes.header} variant="h6" align="center" color="textPrimary" gutterBottom>
+              No projects yet
+            </Typography>
           )
         }
       </Grid>
