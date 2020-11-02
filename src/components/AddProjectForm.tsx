@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import { addProject } from '../actions/projectActions';
 
-import { User, Project, ProjectWithDevs } from '../types/types';
+import { User, Project, ProjectWithDevs, AddProject } from '../types/types';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -57,19 +57,18 @@ const statuses = [
 
 
 interface Props {
-  project: ProjectWithDevs,
   users: User[],
   open: boolean,
   history: any,
-  addProject: (project: Project) => any,
+  addProject: AddProject,
   handleClose: () => void,
 }
 
 const AddProjectForm: React.FC<Props> = (props) => {
   const classes = useStyles();
 
-  const [devNames, setDevNames] = useState<Array<string>>([]);
-  const [status, setStatus] = useState('None');
+  const [devIds, setDevIds] = useState<Array<string>>([]);
+  const [status, setStatus] = useState<string>('None');
   const [formFields, setFormFields] = useState({
     name: '',
     price: '',
@@ -77,14 +76,14 @@ const AddProjectForm: React.FC<Props> = (props) => {
   });
 
   const { users } = props;
-  const stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
+  const stuffUsers: User[] = users.filter((user) => user.stuffId === localStorage.getItem('id'));
 
   const changeStatus = (e) => {
     setStatus(e.target.value);
   }
 
   const changeDevs = (e) => {
-    setDevNames(e.target.value);
+    setDevIds(e.target.value);
   };
 
   const handleChange = (e) => {
@@ -98,7 +97,7 @@ const AddProjectForm: React.FC<Props> = (props) => {
     e.preventDefault();
     const id = localStorage.getItem('id');
     if (id) {
-      props.addProject({ ...formFields, devs: devNames, status, stuffId: id });
+      props.addProject({ ...formFields, devs: devIds, status, stuffId: id });
     } else {
       props.history.push('/auth/signup');
       return;
@@ -107,105 +106,103 @@ const AddProjectForm: React.FC<Props> = (props) => {
   }
 
   return (
-    <div>
-      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add project</DialogTitle>
-        <form
-          onSubmit={handleSubmit}
-          autoComplete="off"
-        >
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
-              value={formFields.name}
-              fullWidth
-              required
-              onChange={handleChange}
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel id="statusLabel">Status</InputLabel>
-              <Select 
-                labelId="statusLabel"           
-                id="status"
-                value={status}
-                onChange={changeStatus}
-              >
-                {
-                  statuses.map((status, i) => (
-                    <MenuItem key={i} value={status}>{status}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
-            <TextField
-              id="price"
-              margin="dense"
-              label="Price"
-              type="text"
-              required
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.price}
-              onChange={handleChange}
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel id="devs-label">Developers</InputLabel>
-              <Select
-                labelId="devs-label"
-                id="devs"
-                multiple
-                value={devNames}
-                onChange={changeDevs}
-                input={<Input id="select-multiple-chip" />}
-                renderValue={(selected) => (
-                  <div>
-                    {
-                      (selected as Array<string>).map((id: string) => {
-                        const user = stuffUsers.find((u) => u._id === id); 
-                        return user 
-                        ? <Chip key={user._id} label={user.name} />
-                        : null
-                      })
-                    }
-                  </div>
-                )}
-                MenuProps={MenuProps}
-              >
-                {stuffUsers.map((user) => (
-                  <MenuItem key={user._id} value={user._id}>
-                    {user.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              id="description"
-              margin="dense"
-              label="About"
-              type="text"
-              multiline
-              rowsMax={4}
-              fullWidth
-              value={formFields.description}
-              onChange={handleChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={props.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button type="submit" color="primary">
-              Add
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+    <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+      <DialogTitle id="form-dialog-title">Add project</DialogTitle>
+      <form
+        onSubmit={handleSubmit}
+        autoComplete="off"
+      >
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="text"
+            value={formFields.name}
+            fullWidth
+            required
+            onChange={handleChange}
+          />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="statusLabel">Status</InputLabel>
+            <Select 
+              labelId="statusLabel"           
+              id="status"
+              value={status}
+              onChange={changeStatus}
+            >
+              {
+                statuses.map((status, i) => (
+                  <MenuItem key={i} value={status}>{status}</MenuItem>
+                ))
+              }
+            </Select>
+          </FormControl>
+          <TextField
+            id="price"
+            margin="dense"
+            label="Price"
+            type="text"
+            required
+            multiline
+            rowsMax={4}
+            fullWidth
+            value={formFields.price}
+            onChange={handleChange}
+          />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="devs-label">Developers</InputLabel>
+            <Select
+              labelId="devs-label"
+              id="devs"
+              multiple
+              value={devIds}
+              onChange={changeDevs}
+              input={<Input id="select-multiple-chip" />}
+              renderValue={(selected) => (
+                <>
+                  {
+                    (selected as Array<string>).map((id: string) => {
+                      const user = stuffUsers.find((u) => u._id === id); 
+                      return user 
+                      ? <Chip key={user._id} label={user.name} />
+                      : null
+                    })
+                  }
+                </>
+              )}
+              MenuProps={MenuProps}
+            >
+              {stuffUsers.map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            id="description"
+            margin="dense"
+            label="About"
+            type="text"
+            multiline
+            rowsMax={4}
+            fullWidth
+            value={formFields.description}
+            onChange={handleChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 }
 

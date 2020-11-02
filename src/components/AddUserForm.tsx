@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { uploadFile } from '../api/s3';
 import { addUser } from '../actions/userActions';
 
+import { AddUser } from '../types/types';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,21 +16,23 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-  addButton: {
-    margin: theme.spacing(2, 3, 2),
-  }
-}));
 
-const AddUserForm = (props) => {
+interface Props {
+  open: boolean,
+  history: any,
+  addUser: AddUser,
+  handleClose: () => void,
+}
+
+const AddUserForm: React.FC<Props> = (props) => {
   const fileInput = useRef<HTMLInputElement>(null);
-
 
   const [formFields, setFormFields] = useState({
     name: '',
     email: '',
     description: '',
-    imageUrl: ''
+    imageUrl: '',
+    tags: []
   });
 
   const handleChange = (e) => {
@@ -42,14 +46,13 @@ const AddUserForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const stuffId = localStorage.getItem('id');
+    const stuffId: string | null = localStorage.getItem('id');
     if (stuffId) {
-      let file;
-
-      const files = fileInput!.current!.files!;
+      let file: File;
+      const files: FileList = fileInput!.current!.files!;
       if (files.length > 0) {
         file = files[0];
-        const imageUrl = await uploadFile(file);
+        const imageUrl: string = await uploadFile(file);
       
         if (imageUrl) {
           props.addUser({ ...formFields, imageUrl, stuffId });
@@ -68,62 +71,55 @@ const AddUserForm = (props) => {
     props.handleClose();
   }
 
-  const classes = useStyles();
-
-
-
   return (
-    <div>
-
-      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add user</DialogTitle>
-          <form
-            onSubmit={handleSubmit} 
-            autoComplete="off"
-          > 
-            <DialogContent>    
-                <InputLabel id="imageLabel">Add image</InputLabel>
-                <input id="imageUrl" type="file" ref={fileInput} />
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Name"
-                  type="text"
-                  fullWidth
-                  required
-                  onChange={handleChange}
-                />
-                <TextField
-                  margin="dense"
-                  id="email"
-                  label="Email Address"
-                  type="email"
-                  fullWidth
-                  required
-                  onChange={handleChange}
-                />
-                <TextField
-                  id="description"
-                  margin="dense"
-                  label="About me"
-                  multiline
-                  rowsMax={4}
-                  fullWidth
-                  onChange={handleChange}
-                />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={props.handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button type="submit" color="primary">
-                Add
-              </Button>
-            </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+    <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+      <DialogTitle id="form-dialog-title">Add user</DialogTitle>
+        <form
+          onSubmit={handleSubmit} 
+          autoComplete="off"
+        > 
+          <DialogContent>    
+            <InputLabel id="imageLabel">Add image</InputLabel>
+            <input id="imageUrl" type="file" ref={fileInput} />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              fullWidth
+              required
+              onChange={handleChange}
+            />
+            <TextField
+              margin="dense"
+              id="email"
+              label="Email Address"
+              type="email"
+              fullWidth
+              required
+              onChange={handleChange}
+            />
+            <TextField
+              id="description"
+              margin="dense"
+              label="About me"
+              multiline
+              rowsMax={4}
+              fullWidth
+              onChange={handleChange}
+            />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 }
 

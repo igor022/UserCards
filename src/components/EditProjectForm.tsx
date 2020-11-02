@@ -53,12 +53,12 @@ interface Props {
   handleClose: () => void,
 }
 
-const EditProjectForm = (props : Props) => {
+const EditProjectForm: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   const { project, users } = props;
 
-  const [status, setStatus] = useState(project.status)
+  const [status, setStatus] = useState<string>(project.status)
 
   const [formFields, setFormFields] = useState({
     name: project.name,
@@ -66,7 +66,7 @@ const EditProjectForm = (props : Props) => {
     description: project.description,
   });
 
-  const [devNames, setDevNames] = useState<Array<string>>(project.devs.map((dev) => dev._id));
+  const [devNames, setDevNames] = useState<string[]>(project.devs.map((dev) => dev._id) as string[]);
 
   const handleChange = (e) => {
     setFormFields({
