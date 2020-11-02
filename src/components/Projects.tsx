@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 
 import { getProjects } from '../actions/projectActions';
@@ -37,14 +37,17 @@ interface Props {
 
 const Projects = (props: Props) => {
   const classes = useStyles();
+  const id = localStorage.getItem('id')!;
 
   const [open, setOpen] = useState<boolean>(false);
 
   const { users, projects } = props;
 
-  const [projectsWithDevs, setProjectsWithDevs] = useState<ProjectWithDevs[]>([]);
+  //const [projectsWithDevs, setProjectsWithDevs] = useState<ProjectWithDevs[]>([]);
   //let projectsWithDevs: ProjectWithDevs[] = [];
-  const [stuffUsers, setStuffUsers] = useState<User[]>([]);
+  const projectsWithDevs: ProjectWithDevs[] = useMemo(() => getProjectsWithDevs(projects, users, id), [projects, users, id]);
+  const stuffUsers: User[] = useMemo(() => getStuffUsers(users, id), [users, id]);
+  //const [stuffUsers, setStuffUsers] = useState<User[]>([]);
   
   const handleOpen = () => {
     setOpen(true);
@@ -59,17 +62,23 @@ const Projects = (props: Props) => {
     props.getProjects();
   }, [])
   
-  useEffect(() => {
-    console.log('UPDATE');
-    const id = localStorage.getItem('id');
+  function getStuffUsers(users: User[], id: string) {
+    console.log('getStuffUsers');
+    if (id && users) {
+      return users.filter((user) => user.stuffId === id);
+    }
+    return [];
+  }
+
+  function getProjectsWithDevs(projects : Project[], users: User[], id: string): ProjectWithDevs[] {
+    console.log('getProjectsWithDevs');
     if (projects && users && id) {
       const stuff = users.filter((user) => user.stuffId === id);
-      setStuffUsers(stuff);
 
       const withDevs = projects
         .filter((p) => p.stuffId === id)
         .map((project) => {
-          const developers: User[] = project.devs.map((dev) => stuffUsers.find((u) => u._id === dev))
+          const developers: User[] = project.devs.map((dev) => stuff.find((u) => u._id === dev))
             .filter((item) => item !== undefined) as User[];
       
           return {
@@ -78,9 +87,32 @@ const Projects = (props: Props) => {
           } 
         }
       );
-      setProjectsWithDevs(withDevs);
+      return withDevs;
     }
-  }, [projects, users])
+    return [];
+  }
+  // useEffect(() => {
+  //   console.log('UPDATE');
+  //   const id = localStorage.getItem('id');
+  //   if (projects && users && id) {
+  //     const stuff = users.filter((user) => user.stuffId === id);
+  //     setStuffUsers(stuff);
+
+  //     const withDevs = projects
+  //       .filter((p) => p.stuffId === id)
+  //       .map((project) => {
+  //         const developers: User[] = project.devs.map((dev) => stuffUsers.find((u) => u._id === dev))
+  //           .filter((item) => item !== undefined) as User[];
+      
+  //         return {
+  //           ...project,
+  //           devs: developers
+  //         } 
+  //       }
+  //     );
+  //     setProjectsWithDevs(withDevs);
+  //   }
+  // }, [projects, users])
 
   return(
     <div className={classes.usersContent}>

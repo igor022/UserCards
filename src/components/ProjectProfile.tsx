@@ -7,6 +7,8 @@ import { getUsers } from '../actions/userActions';
 import MiniUser from './MiniUser';
 import Status from './Status';
 
+import { Project, User, GetUsers, GetProjects, EditProject, DeleteProject } from '../types/types';
+
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -66,7 +68,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Project = (props) => {
+interface Props { 
+  projects: Project[],
+  users: User[],
+  getUsers: GetUsers,
+  getProjects: GetProjects,
+  editProject: EditProject,
+  deleteProject: DeleteProject,
+  [propNames: string]: any,
+}
+
+const ProjectProfile: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   const { projects, users } = props;
@@ -190,4 +202,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Project));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProjectProfile));
