@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
   },
-  fab: {
-
-  },
 }));
 
 const Tags = (props) => {

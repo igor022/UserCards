@@ -67,11 +67,16 @@ const useStyles = makeStyles((theme) => ({
   navLink: {
     textDecoration: 'none',
   },
+  addButton: {
+    width: '100%'
+  }
 }));
 
 const UserProfile = (props) => {
   const classes = useStyles();
   
+  const [open, setOpen] = useState(false);
+
   const {users, projects} = props;
   const userId = props.match.params.id;
   
@@ -110,6 +115,14 @@ const UserProfile = (props) => {
     edited.tags = tags;
     props.editUser(edited);
   }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.usersContent}>
@@ -172,7 +185,10 @@ const UserProfile = (props) => {
               user.stuffId === localStorage.getItem('id')
               ? (
                 <>
-                  <EditUserForm user={user}/>
+                  <Button className={classes.addButton} variant="contained" color="primary" onClick={handleClickOpen}>
+                    Edit user
+                  </Button>
+                  <EditUserForm open={open} user={user} handleClose={handleClose}/>
                   <Button className={classes.deleteButton} onClick={() => handleDelete(user._id)} variant="contained" color="secondary">
                     Delete user
                   </Button>
