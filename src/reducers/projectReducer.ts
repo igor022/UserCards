@@ -12,7 +12,7 @@ const initState: ProjectsState = {
   isLoading: false,
 }
 
-const projectReducer = (state = initState, {type, payload}) => {
+const projectReducer = (state: ProjectsState = initState, {type, payload}) => {
   switch (type) {
     case GET_PROJECTS_LOADING:
       {

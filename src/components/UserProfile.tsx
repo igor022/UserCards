@@ -8,6 +8,11 @@ import { getUsers, editUser, deleteUser } from '../actions/userActions';
 
 import { Project, User, FieldToEdit, GetProjects, GetUsers, EditUser, DeleteUser } from '../types/types';
 
+import Loading from './Loading';
+import EditUserForm from './EditUserForm';
+import Tags from './Tags';
+import ProjectTags from './ProjectTags';
+
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -16,9 +21,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
-import Loading from './Loading';
-import EditUserForm from './EditUserForm';
-import Tags from './Tags';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -167,7 +169,7 @@ const UserProfile: React.FC<Props> = (props) => {
             <Typography variant="h6"  color="textPrimary">
               Projects:
             </Typography>
-            <ul className={classes.projects}>
+            {/* <ul className={classes.projects}>
               {
                 devProjects.map((project : Project) => (
                   <li key={project._id}>
@@ -180,7 +182,8 @@ const UserProfile: React.FC<Props> = (props) => {
                   </li>
                 ))
               } 
-            </ul>          
+            </ul>           */}
+            <ProjectTags projects={projects} userId={user._id}/>
             <hr></hr>
             <div className={classes.aboutMe}>
               <Typography variant="h4" color="textPrimary" gutterBottom>

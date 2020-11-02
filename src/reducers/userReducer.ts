@@ -12,7 +12,7 @@ const initState: UsersState = {
   isLoading: false,
 }
 
-const userReducer = (state = initState, {type, payload}) => {
+const userReducer = (state: UsersState = initState, {type, payload}) => {
   switch (type) {
     case GET_USERS_LOADING:
       {

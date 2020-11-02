@@ -66,7 +66,7 @@ const EditProjectForm: React.FC<Props> = (props) => {
     description: project.description,
   });
 
-  const [devNames, setDevNames] = useState<string[]>(project.devs.map((dev) => dev._id) as string[]);
+  const [devIds, setDevIds] = useState<string[]>(project.devs.map((dev) => dev._id) as string[]);
 
   const handleChange = (e) => {
     setFormFields({
@@ -76,7 +76,7 @@ const EditProjectForm: React.FC<Props> = (props) => {
   }
 
   const changeDevs = (e) => {
-    setDevNames(e.target.value);
+    setDevIds(e.target.value);
   };
 
   const changeStatus = (e) => {
@@ -85,7 +85,7 @@ const EditProjectForm: React.FC<Props> = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.editProject({ ...project, ...formFields, devs: devNames, status });
+    props.editProject({ ...project, ...formFields, devs: devIds, status });
     props.handleClose();
   }
 
@@ -143,7 +143,7 @@ const EditProjectForm: React.FC<Props> = (props) => {
               id="devs"
               multiple
               defaultValue={project.devs}
-              value={devNames}
+              value={devIds}
               onChange={changeDevs}
               input={<Input id="select-multiple-chip" />}
               renderValue={(selected) => (
