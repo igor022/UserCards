@@ -8,6 +8,8 @@ import { getUsers, editUser, deleteUser } from '../actions/userActions';
 
 import { Project, User, FieldToEdit, GetProjects, GetUsers, EditUser, DeleteUser } from '../types/types';
 
+import { getStuffProjects } from '../utils/utils';
+
 import Loading from './Loading';
 import EditUserForm from './EditUserForm';
 import Tags from './Tags';
@@ -100,8 +102,12 @@ const UserProfile: React.FC<Props> = (props) => {
     }
   }
 
+
+  const id = localStorage.getItem('id');
+
+  const stuffProjects = getStuffProjects(projects, id as string);
   let devProjects: Array<Project> = [];
-  if (projects && user) {
+  if (projects && user && id) {
     devProjects = projects.filter((project) => project.devs.find((dev) => dev === user!._id));
   }
 
@@ -138,7 +144,7 @@ const UserProfile: React.FC<Props> = (props) => {
   return (
     <div className={classes.usersContent}>
     { 
-      user
+      user && projects
       ? 
         <Container maxWidth="sm">
           <Paper className={classes.profile}>
@@ -169,21 +175,7 @@ const UserProfile: React.FC<Props> = (props) => {
             <Typography variant="h6"  color="textPrimary">
               Projects:
             </Typography>
-            {/* <ul className={classes.projects}>
-              {
-                devProjects.map((project : Project) => (
-                  <li key={project._id}>
-                    <Link className={classes.navLink} to={`/projects/${project._id}`}>
-                      <Chip
-                        label={project.name}
-                        className={classes.chip}
-                      />
-                    </Link>
-                  </li>
-                ))
-              } 
-            </ul>           */}
-            <ProjectTags projects={projects} userId={user._id}/>
+            <ProjectTags projects={stuffProjects} userId={user._id}/>
             <hr></hr>
             <div className={classes.aboutMe}>
               <Typography variant="h4" color="textPrimary" gutterBottom>

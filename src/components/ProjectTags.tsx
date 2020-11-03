@@ -128,7 +128,7 @@ const ProjectTags: React.FC<Props> = (props) => {
           >
             <DialogContent>
               <FormControl className={classes.formControl}>
-                <InputLabel id="demo-mutiple-chip-label">Developers</InputLabel>
+                <InputLabel id="demo-mutiple-chip-label">Projects</InputLabel>
                 <Select
                   labelId="demo-mutiple-chip-label"
                   id="devs"
