@@ -82,7 +82,7 @@ const Tags: React.FC<Props> = (props) => {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} color="primary">
+              <Button type="submit" color="primary">
                 Add
               </Button>
             </DialogActions>

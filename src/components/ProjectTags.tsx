@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Box from '@material-ui/core/Box';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -68,10 +69,9 @@ const ProjectTags: React.FC<Props> = (props) => {
 
   const devProjects = projects
     .filter((project) => project.devs.find((dev) => dev === userId));
-  
-  const [devIds, setDevIds] = useState<string[]>(devProjects.map((dev) => dev._id) as string[]);
-  const [open, setOpen] = useState<boolean>(false);
 
+  const [projectIds, setProjectIds] = useState<string[]>(devProjects.map((p) => p._id) as string[]);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,15 +82,36 @@ const ProjectTags: React.FC<Props> = (props) => {
   };
 
   const changeDevs = (e) => {
-    setDevIds(e.target.value);
+    const projectsSelect = e.target.value;
+    const devsNoDuplicates = projectsSelect.filter((p, i) => projectsSelect.indexOf(p) === i);
+    setProjectIds(devsNoDuplicates);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    devProjects.forEach((project) => {
-      props.editProject({ _id: project._id as string, devs: [...project.devs, userId] });
-    })
+    // Add developer to projects
+    projectIds
+      .filter((id) => !devProjects.find((project) => project._id === id))
+      .forEach((id) => {
+        const projectToEdit = projects.find((p) => p._id === id);
+        if (projectToEdit) {
+          props.editProject({ 
+            _id: projectToEdit._id as string, 
+            devs: [...projectToEdit.devs, userId] 
+          });
+        }
+      })
+    // Exclude deleloper from projects
+    devProjects
+      .filter((project) => !projectIds.find((id) => project._id === id))
+      .forEach((project) => {
+        props.editProject({
+          _id: project._id as string,
+          devs: project.devs.filter((dev) => dev != userId)
+        })
+      })
+    
     handleClose();
   }
 
@@ -98,7 +119,7 @@ const ProjectTags: React.FC<Props> = (props) => {
     <Box component="ul" className={classes.root}>
       <li className={classes.chip}>
         <IconButton onClick={handleClickOpen} color="primary" size="small">
-          <AddIcon />
+          <EditIcon />
         </IconButton>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
           <form
@@ -112,7 +133,7 @@ const ProjectTags: React.FC<Props> = (props) => {
                   labelId="demo-mutiple-chip-label"
                   id="devs"
                   multiple
-                  value={devIds}
+                  value={projectIds}
                   onChange={changeDevs}
                   input={<Input id="select-multiple-chip" />}
                   renderValue={(selected) => (
@@ -141,7 +162,7 @@ const ProjectTags: React.FC<Props> = (props) => {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} color="primary">
+              <Button type="submit" color="primary">
                 Edit
               </Button>
             </DialogActions>
