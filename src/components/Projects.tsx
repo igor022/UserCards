@@ -44,10 +44,8 @@ const Projects = (props: Props) => {
 
   const { users, projects } = props;
 
-  //const [projectsWithDevs, setProjectsWithDevs] = useState<ProjectWithDevs[]>([]);
-  //const [stuffUsers, setStuffUsers] = useState<User[]>([]);
-  const projectsWithDevs: ProjectWithDevs[] = useMemo(() => getProjectsWithDevs(projects, users, id), [projects, users, id]);
-  const stuffUsers: User[] = useMemo(() => getStuffUsers(users, id), [users, id]);
+  const projectsWithDevs: ProjectWithDevs[] = useMemo(() => getProjectsWithDevs(projects, users, id), [projects, users]);
+  const stuffUsers: User[] = useMemo(() => getStuffUsers(users, id), [users]);
   
   const handleOpen = () => {
     setOpen(true);
@@ -61,30 +59,6 @@ const Projects = (props: Props) => {
     props.getUsers();
     props.getProjects();
   }, [])
-  
-
-  // useEffect(() => {
-  //   console.log('UPDATE');
-  //   const id = localStorage.getItem('id');
-  //   if (projects && users && id) {
-  //     const stuff = users.filter((user) => user.stuffId === id);
-  //     setStuffUsers(stuff);
-
-  //     const withDevs = projects
-  //       .filter((p) => p.stuffId === id)
-  //       .map((project) => {
-  //         const developers: User[] = project.devs.map((dev) => stuffUsers.find((u) => u._id === dev))
-  //           .filter((item) => item !== undefined) as User[];
-      
-  //         return {
-  //           ...project,
-  //           devs: developers
-  //         } 
-  //       }
-  //     );
-  //     setProjectsWithDevs(withDevs);
-  //   }
-  // }, [projects, users])
 
   return(
     <div className={classes.usersContent}>

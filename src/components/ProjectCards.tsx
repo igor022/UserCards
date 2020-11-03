@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import ProjectCard from './ProjectCard';
 
 import { Project } from '../types/types';
+
+import { getStuffProjects } from '../utils/utils';
 
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -34,10 +36,7 @@ const ProjectCards: React.FC<Props> = (props) => {
   const { projects } = props;
   const classes = useStyles();
 
-  let stuffProjects;
-  if (projects) {
-    stuffProjects = projects.filter((project) => project.stuffId === localStorage.getItem('id'));
-  }
+  const stuffProjects: Project[] = useMemo(() => getStuffProjects(projects, localStorage.getItem('id')), [projects]);
 
   return(
     <Container className={classes.cardGrid} maxWidth="md">

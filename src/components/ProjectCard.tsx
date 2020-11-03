@@ -57,7 +57,7 @@ const ProjectCard: React.FC<Props> = (props) => {
   const classes = useStyles();
   const { project } = props;
   
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
   const handleToggle = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getProjects, editProject, deleteProject } from '../actions/projectActions';
@@ -8,6 +8,8 @@ import MiniUser from './MiniUser';
 import Status from './Status';
 
 import { Project, User, GetUsers, GetProjects, EditProject, DeleteProject, FieldToEdit } from '../types/types';
+
+import { getStuffUsers } from '../utils/utils';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -85,11 +87,7 @@ const ProjectProfile: React.FC<Props> = (props) => {
 
   const projectId = props.match.params.id;
 
-  
-  let stuffUsers;
-  if (users) {
-    stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
-  }
+  const stuffUsers: User[] = useMemo(() => getStuffUsers(users, localStorage.getItem('id')), [users]);
   
   let project;
   let developers;

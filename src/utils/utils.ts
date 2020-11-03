@@ -36,7 +36,6 @@ export const getProjectsWithDevs = (projects : Project[], users: User[], id: str
   return [];
 }
 
-
 export const getDevsWithProjects = (projects: Project[], users: User[]): UserWithProjects[] => {
   if (projects && users) {
     return users.map((u) => {

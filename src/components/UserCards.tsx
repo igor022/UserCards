@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import UserCard from './UserCard';
 
 import { User } from '../types/types';
+
+import { getStuffUsers } from '../utils/utils';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -34,10 +36,7 @@ const UserCards: React.FC<Props> = (props) => {
   const { users } = props;
   const classes = useStyles();
 
-  let stuffUsers;
-  if (users) {
-    stuffUsers = users.filter((user) => user.stuffId === localStorage.getItem('id'));
-  }
+  const stuffUsers: User[] = useMemo(() => getStuffUsers(users, localStorage.getItem('id')), [users]);
 
   return(
     <Container className={classes.cardGrid} maxWidth="md">

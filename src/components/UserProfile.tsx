@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -94,27 +94,30 @@ const UserProfile: React.FC<Props> = (props) => {
   const {users, projects} = props;
   const userId = props.match.params.id;
   
-  let user : User | undefined;
-  if (users && users.length) {
-    user = users.find((user) => user._id === userId);
-    if (!user) {
-      props.history.push('/404');
-    }
-  }
+  const [user, setUser] = useState<User | undefined>(undefined);
 
 
-  const id = localStorage.getItem('id');
-
-  const stuffProjects: Project[] = getStuffProjects(projects, id as string);
-  let devProjects: Array<Project> = [];
-  if (projects && user && id) {
-    devProjects = projects.filter((project) => project.devs.find((dev) => dev === user!._id));
-  }
+  const stuffProjects: Project[] = useMemo(
+    () => getStuffProjects(projects, localStorage.getItem('id')), 
+    [projects]
+  );
 
   useEffect(() => {
     props.getProjects();
     props.getUsers();
   }, []);
+
+  useEffect(() => {
+    console.log('users change');
+    if (users && users.length > 0) {
+      const user = users.find((user) => user._id === userId);
+      if (!user) {
+        props.history.push('/404');
+      } else {
+        setUser(user);
+      }
+    }
+  }, [users])
 
   const handleDelete = (id) => {
     props.deleteUser(id);

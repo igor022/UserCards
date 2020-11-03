@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   projectsWithDevs: ProjectWithDevs[],
   stuffUsers: User[],
-
 }
 
 const ProjectsTable: React.FC<Props> = (props) => {
