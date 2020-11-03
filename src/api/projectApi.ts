@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Project } from '../types/types';
+import { Project, FieldToEdit } from '../types/types';
 
 const api = process.env.REACT_APP_API;
 
@@ -22,7 +22,7 @@ const addProject = async (project: Project) => {
 
 }
 
-const deleteProject = async (id) => {
+const deleteProject = async (id: string) => {
   try {
     const { data } = await axios (
       {
@@ -40,7 +40,7 @@ const deleteProject = async (id) => {
   }
 }
 
-const editProject = async (project) => {
+const editProject = async (project: FieldToEdit) => {
   try {
     const { data } = await axios (
       {

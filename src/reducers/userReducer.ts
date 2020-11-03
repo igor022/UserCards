@@ -3,7 +3,7 @@ import { GET_USERS_LOADING, GET_USERS, ADD_USER, DELETE_USER, EDIT_USER } from '
 import { User } from '../types/types';
 
 interface UsersState {
-  users: Array<User>,
+  users: User[],
   isLoading: boolean
 }
 
@@ -25,7 +25,7 @@ const userReducer = (state: UsersState = initState, {type, payload}) => {
 
     case GET_USERS:
       {
-        const users = payload.users;
+        const users: User[] = payload.users;
         return {
           ...state,
           users,
@@ -36,8 +36,8 @@ const userReducer = (state: UsersState = initState, {type, payload}) => {
 
     case ADD_USER: 
       {
-        const { user } = payload;
-        const users = [...state.users];
+        const user: User = payload.user;
+        const users: User[] = [...state.users];
         users.unshift(user);
         return {
           ...state,
@@ -48,10 +48,13 @@ const userReducer = (state: UsersState = initState, {type, payload}) => {
 
     case EDIT_USER:
       {
-        const { user } = payload;
-        const users = [...state.users];
-        const userToEdit = users.findIndex((u) => u._id === user._id);
-        users.splice(userToEdit, 1, user);
+        const user: User = payload.user;
+        const users: User[] = [...state.users];
+        const userToEdit: number = users.findIndex((u) => u._id === user._id);
+        if (userToEdit >= 0) {
+          users.splice(userToEdit, 1, user);
+        }
+
         return {
           ...state,
           users
@@ -61,8 +64,8 @@ const userReducer = (state: UsersState = initState, {type, payload}) => {
 
     case DELETE_USER: 
       {
-        const { id } = payload;
-        const users = state.users.filter((u) => u._id !== id);
+        const id: string = payload.id;
+        const users: User[] = state.users.filter((u) => u._id !== id);
         return {
           ...state,
           users

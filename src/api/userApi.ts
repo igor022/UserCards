@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+import { User, FieldToEdit } from '../types/types';
+
 const api = process.env.REACT_APP_API;
 
-const addUser = async (user) => {
+const addUser = async (user: User) => {
   try {
     const { data } = await axios.post(
       `${api}/users`, 
@@ -19,7 +21,7 @@ const addUser = async (user) => {
 
 }
 
-const deleteUser = async (id) => {
+const deleteUser = async (id: string) => {
   try {
     const { data } = await axios (
       {
@@ -37,7 +39,7 @@ const deleteUser = async (id) => {
   }
 }
 
-const editUser = async (user) => {
+const editUser = async (user: FieldToEdit) => {
   try {
     const { data } = await axios (
       {

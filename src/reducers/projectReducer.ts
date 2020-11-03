@@ -3,7 +3,7 @@ import { GET_PROJECTS_LOADING, GET_PROJECTS, ADD_PROJECT, DELETE_PROJECT, EDIT_P
 import { Project } from '../types/types';
 
 interface ProjectsState {
-  projects: Array<Project>,
+  projects: Project[],
   isLoading: boolean
 }
 
@@ -25,7 +25,7 @@ const projectReducer = (state: ProjectsState = initState, {type, payload}) => {
 
     case GET_PROJECTS:
       {
-        const { projects } = payload;
+        const projects: Project[] = payload.projects;
         return {
           ...state,
           projects,
@@ -37,7 +37,7 @@ const projectReducer = (state: ProjectsState = initState, {type, payload}) => {
     case ADD_PROJECT: 
       {
         const project: Project = payload.project;
-        const projects: Array<Project> = [...state.projects];
+        const projects: Project[] = [...state.projects];
         projects.unshift(project);
         return {
           ...state,
@@ -49,7 +49,7 @@ const projectReducer = (state: ProjectsState = initState, {type, payload}) => {
     case EDIT_PROJECT:
       {
         const project: Project = payload.project;
-        const projects: Array<Project> = [...state.projects];
+        const projects: Project[] = [...state.projects];
         const projectToEdit = projects.findIndex((p) => p._id === project._id);
         projects.splice(projectToEdit, 1, project);
         return {
@@ -61,8 +61,8 @@ const projectReducer = (state: ProjectsState = initState, {type, payload}) => {
 
     case DELETE_PROJECT: 
       {
-        const { id } = payload;
-        const projects = (state as ProjectsState).projects.filter((p) => p._id !== id);
+        const id: string = payload.id;
+        const projects = state.projects.filter((p) => p._id !== id);
         return {
           ...state,
           projects

@@ -108,7 +108,7 @@ const ProjectTags: React.FC<Props> = (props) => {
       .forEach((project) => {
         props.editProject({
           _id: project._id as string,
-          devs: project.devs.filter((dev) => dev != userId)
+          devs: project.devs.filter((dev) => dev !== userId)
         })
       })
     

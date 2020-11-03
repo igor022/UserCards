@@ -105,7 +105,7 @@ const UserProfile: React.FC<Props> = (props) => {
 
   const id = localStorage.getItem('id');
 
-  const stuffProjects = getStuffProjects(projects, id as string);
+  const stuffProjects: Project[] = getStuffProjects(projects, id as string);
   let devProjects: Array<Project> = [];
   if (projects && user && id) {
     devProjects = projects.filter((project) => project.devs.find((dev) => dev === user!._id));
