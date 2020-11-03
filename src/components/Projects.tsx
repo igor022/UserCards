@@ -45,10 +45,9 @@ const Projects = (props: Props) => {
   const { users, projects } = props;
 
   //const [projectsWithDevs, setProjectsWithDevs] = useState<ProjectWithDevs[]>([]);
-  //let projectsWithDevs: ProjectWithDevs[] = [];
+  //const [stuffUsers, setStuffUsers] = useState<User[]>([]);
   const projectsWithDevs: ProjectWithDevs[] = useMemo(() => getProjectsWithDevs(projects, users, id), [projects, users, id]);
   const stuffUsers: User[] = useMemo(() => getStuffUsers(users, id), [users, id]);
-  //const [stuffUsers, setStuffUsers] = useState<User[]>([]);
   
   const handleOpen = () => {
     setOpen(true);

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import { connect } from 'react-redux';
 
 import { getProjects } from '../actions/projectActions';
@@ -6,7 +6,9 @@ import { getUsers } from '../actions/userActions';
 
 import Loading from './Loading';
 
-import { User, Project, ProjectWithDevs, GetProjects, GetUsers } from '../types/types';
+import { User, Project, UserWithProjects, GetProjects, GetUsers } from '../types/types';
+
+import { getDevsWithProjects } from '../utils/utils';
 
 import Header from './Header';
 import UserCards from './UserCards';
@@ -45,21 +47,13 @@ const Home: React.FC<Props> = (props) => {
   const users = props.users;
   const projects = [...props.projects];
   
+  
+  const devsWithProjects: UserWithProjects[] = useMemo(() => getDevsWithProjects(projects, users), [projects, users]);
+
+  
+  // Sort top projects and users
   if (projects) {
     projects.sort((a, b) => (parseInt(b.price) - parseInt(a.price)));
-  }
-
-  let devsWithProjects;
-  if (projects && users) {
-    devsWithProjects = users.map((u) => {
-      const devProjects = projects.filter((p) => {
-        return p.devs.find((dev) => dev === u._id);
-      })
-      return {
-        ...u,
-        devProjects
-      };
-    })
   }
 
   devsWithProjects.sort((a, b) => {
@@ -70,7 +64,7 @@ const Home: React.FC<Props> = (props) => {
 
   useEffect(() => {
     props.getProjects();
-    props.getUsers();
+    props.getUsers(); 
   }, []);
 
   return (

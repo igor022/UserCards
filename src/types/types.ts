@@ -15,6 +15,17 @@ export interface User {
     stuffId: string
 }
 
+export interface UserWithProjects {
+    _id?: string,
+    name: string,
+    email: string,
+    description: string,
+    imageUrl: string,
+    tags: string[],
+    stuffId: string,
+    devProjects: Project[]
+}
+
 export interface Project {
     _id?: string,
     name: string,

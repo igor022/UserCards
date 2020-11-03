@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 import { addProject } from '../actions/projectActions';
 
 import { User, Project, ProjectWithDevs, AddProject } from '../types/types';
+
+import { getStuffUsers } from '../utils/utils';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -76,7 +78,8 @@ const AddProjectForm: React.FC<Props> = (props) => {
   });
 
   const { users } = props;
-  const stuffUsers: User[] = users.filter((user) => user.stuffId === localStorage.getItem('id'));
+  const id: string | null = localStorage.getItem('id');
+  const stuffUsers: User[] = useMemo(() => getStuffUsers(users, id), [users, id]);
 
   const changeStatus = (e) => {
     setStatus(e.target.value);

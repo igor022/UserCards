@@ -64,8 +64,6 @@ const EditUserForm: React.FC<Props> = (props) => {
     props.handleClose();
   }
 
-
-
   return (
     <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">Edit user</DialogTitle>

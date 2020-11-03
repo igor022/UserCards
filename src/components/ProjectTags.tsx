@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { connect } from 'react-redux';
 
 import { editProject } from '../actions/projectActions';
@@ -67,8 +67,10 @@ const ProjectTags: React.FC<Props> = (props) => {
 
   const { projects, userId } = props;
 
-  const devProjects = projects
-    .filter((project) => project.devs.find((dev) => dev === userId));
+  const devProjects: Project[] = useMemo(() => {
+    return projects
+      .filter((project) => project.devs.find((dev) => dev === userId));
+  }, [projects, userId]);
 
   const [projectIds, setProjectIds] = useState<string[]>(devProjects.map((p) => p._id) as string[]);
   const [open, setOpen] = useState<boolean>(false);
